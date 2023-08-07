@@ -1,15 +1,17 @@
-
+import { NodeType } from "./template";
 
 export class HexNode {
 
     private id: number;
+    private nodeType: NodeType;
     private isPlanet: boolean;
     private neighbors: HexNode [] = [];
     private planetName: string | undefined = undefined;
 
-    constructor(id: number, isPlanet: boolean, planetName?: string) {
+    constructor(id: number, nodeType: NodeType, planetName?: string) {
         this.id = id;
-        this.isPlanet = isPlanet;
+        this.nodeType = nodeType;
+        this.isPlanet = nodeType === NodeType.planet;
         this.planetName = planetName;
     }
 
@@ -35,6 +37,9 @@ export class HexNode {
     }
     // add neighbors, add (player) worm hole
 
+    public getNodeType(){
+        return this.nodeType;
+    }
 }
 
 
