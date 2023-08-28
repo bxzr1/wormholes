@@ -1,4 +1,4 @@
-# Wormholes
+# Wormholes - Tentative TODO Schedule
 <p align="left">
 Week 2:
 Board piece templates
