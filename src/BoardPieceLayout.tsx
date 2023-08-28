@@ -2,7 +2,20 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { HexNode } from './HexNode';
 import { NodeType, template } from './template';
 import { BoardPiece } from './BoardPiece';
+import './BoardStyle.css';
 
+function findRowAndColumn(index: number): { row: number, column: number } {
+    if(index < 3)
+        return { row: 1, column: 3 + index * 2 };
+    else if(index < 7)
+        return { row: 4, column: 2 + (index - 3)*2 };
+    else if (index < 12)
+        return { row: 7, column: 1 + (index - 7)*2 };
+    else if(index < 16)
+        return { row: 10, column: 2 + (index - 12)*2 };
+    else
+        return { row: 13, column: 3 + (index - 16)*2 };
+}
 
 export const BoardPieceLayout = (props: {boardPiece: BoardPiece}) => {
     const { boardPiece } = props;
@@ -18,28 +31,22 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece}) => {
     }, [clicked]);
     
     return (
-        <div>
-            {nodes.map(hex => {
-                const isClicked = hex.getId() === clicked;
-                const isNeighbor = neighbors.includes(nodes[hex.getId()]);
+        <div className='grid-container'>
+            {nodes.map((hex) => {
+                const id = hex.getId();
+                const { row, column } = findRowAndColumn(id);
+                const isClicked = id === clicked;
+                const isNeighbor = neighbors.includes(nodes[id]);
+                const className = `hex ${isClicked ? 'is-clicked' : ''} ${isNeighbor ? 'is-neighbor' : ''} ${hex.getNodeType()}`;
+
                 return (
-                <div style={ {
-                     color: 'white', 
-                     border: '1px solid blue', 
-                     height: 20, 
-                     width: 200, 
-                     margin: 8, 
-                     padding: 10, 
-                     display: 'flex',
-                     flexDirection: "column",
-                     cursor: hex.getNodeType() === NodeType.unreachable ? 'not-allowed' : "pointer",
-                     backgroundColor:  hex.getNodeType() === NodeType.unreachable ? "grey" : 
-                        isClicked ? 'blue' : 
-                        isNeighbor ? 'green' : 'red'}} 
-                     onClick={() => setClicked(hex.getId())}>
-                    {`id: ${hex.getId()}`}
+                <div className={className} 
+                     style={ {
+                        gridColumn: `col ${column} / span 2`,
+                        gridRow: `row ${row} / span 4`} } 
+                     onClick={() => setClicked(id)}>
+                    {`id: ${id}`}
                     {hex.getPlanetName()}
-                    {`nodeType: ${hex.getNodeType()}`}
                 </div>)
             })}
         </div>

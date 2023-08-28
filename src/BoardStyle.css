@@ -1,0 +1,58 @@
+.hex {
+    color: white;
+    border: 20px solid black;
+    background-color: black;
+    box-sizing: border-box;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    cursor: pointer
+}
+
+.hex.is-clicked{
+    border: 20px solid rgb(248, 73, 73);
+}
+
+.hex.is-neighbor{
+    border: 20px solid rgb(112, 112, 249);
+}
+
+.hex.unreachable {
+    border: 20px solid gray;
+    background-color: gray;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.hex.space {
+    background-color: rgb(31, 0, 31);
+}
+
+.hex.planet {
+    background-color: rgba(255, 194, 81, 0.766);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.hex.nebula {
+    background-color: lightcoral;
+}
+
+.hex.cannon {
+    background-color: rgba(0, 255, 255, 0.54);
+}
+
+.hex.orbit {
+    background-color: rgb(22, 77, 33);
+}
+
+.grid-container {
+    display: grid;
+    grid-template: repeat(16, [row] minmax(50px, 1fr)) / repeat(10, [col] minmax(100px, 1fr));
+    grid-gap: 4px;
+}
+

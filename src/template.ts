@@ -1,24 +1,38 @@
 export const enum NodeType
 {
-    space,
-    planet,
-    unreachable, // for astroids/stars/spacestation
-    nebula,
-    cannon,
-    orbit
+    unreachable = "unreachable", // for astroids/stars/spacestation
+    space = "space",
+    planet = "planet",
+    nebula = "nebula",
+    cannon = "cannon",
+    orbit = "orbit"
+}
+
+export const enum PlanetTypes
+{
+    BlueRed = "BlueRed",
+    PinkSaturn = "PinkSaturn",
+    GreenBall = "GreenBall",
+    IceBall = "IceBall",
+    BlackGold = "BlackGold",
+    FuzzyOrange = "FuzzyOrange",
+    WaterWorld = "WaterWorld",
+    FuzzyIce = "FuzzyIce",
+    YellowJupiter = "YellowJupiter",
+    PurpleEye = "PurpleEye"
 }
 
 export interface NodeDescription
 {
     type: NodeType;
-    name?: string;
+    name?: PlanetTypes;
 }
 
 export const template: NodeDescription[][] = [
     //0
     [{ type: NodeType.unreachable},
      { type: NodeType.space},
-     { type: NodeType.planet, name: "BlueRed"},
+     { type: NodeType.planet, name: PlanetTypes.BlueRed},
      { type: NodeType.space},
      { type: NodeType.space},
      { type: NodeType.space},
@@ -67,7 +81,7 @@ export const template: NodeDescription[][] = [
      { type: NodeType.space},
      { type: NodeType.space},
      { type: NodeType.space},
-     { type: NodeType.planet, name: "PinkSaturn"},
+     { type: NodeType.planet, name: PlanetTypes.PinkSaturn},
      { type: NodeType.space},
      { type: NodeType.space},
      { type: NodeType.space},
@@ -85,7 +99,7 @@ export const template: NodeDescription[][] = [
      { type: NodeType.space},
      { type: NodeType.space},
      { type: NodeType.unreachable},
-     { type: NodeType.planet, name: "GreenBall"},
+     { type: NodeType.planet, name: PlanetTypes.GreenBall },
      { type: NodeType.space},
      { type: NodeType.space},
      { type: NodeType.unreachable},
@@ -106,7 +120,7 @@ export const template: NodeDescription[][] = [
      { type: NodeType.cannon},
      { type: NodeType.space},
      { type: NodeType.space},
-     { type: NodeType.planet, name: "IceBall"},
+     { type: NodeType.planet, name: PlanetTypes.IceBall },
      { type: NodeType.space},
      { type: NodeType.space},
      { type: NodeType.space},
@@ -119,7 +133,7 @@ export const template: NodeDescription[][] = [
     [{ type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.unreachable},
-    { type: NodeType.planet, name: "BlackGold"},
+    { type: NodeType.planet, name: PlanetTypes.BlackGold },
     { type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.space},
@@ -131,7 +145,7 @@ export const template: NodeDescription[][] = [
     { type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.unreachable},
-    { type: NodeType.planet, name: "FuzzyOrange"},
+    { type: NodeType.planet, name: PlanetTypes.FuzzyOrange },
     { type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.space}],
@@ -150,7 +164,7 @@ export const template: NodeDescription[][] = [
     { type: NodeType.space},
     { type: NodeType.unreachable},
     { type: NodeType.unreachable},
-    { type: NodeType.planet, name: "WaterWorld"},
+    { type: NodeType.planet, name: PlanetTypes.WaterWorld},
     { type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.space},
@@ -173,7 +187,7 @@ export const template: NodeDescription[][] = [
     { type: NodeType.unreachable},
     { type: NodeType.space},
     { type: NodeType.space},
-    { type: NodeType.planet, name: "FuzzyIce"},
+    { type: NodeType.planet, name: PlanetTypes.FuzzyIce},
     { type: NodeType.space}],
     //8
     [{ type: NodeType.space},
@@ -190,7 +204,7 @@ export const template: NodeDescription[][] = [
     { type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.space},
-    { type: NodeType.planet, name: "YellowJupiter"},
+    { type: NodeType.planet, name: PlanetTypes.YellowJupiter},
     { type: NodeType.space},
     { type: NodeType.unreachable},
     { type: NodeType.space},
@@ -204,7 +218,7 @@ export const template: NodeDescription[][] = [
     { type: NodeType.space},
     { type: NodeType.space},
     { type: NodeType.space},
-    { type: NodeType.planet, name: "PurpleEye"},
+    { type: NodeType.planet, name: PlanetTypes.PurpleEye},
     { type: NodeType.space},
     { type: NodeType.unreachable},
     { type: NodeType.unreachable},

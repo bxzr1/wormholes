@@ -11,7 +11,7 @@ function App() {
   });
 
   return (
-    <div className="App" style={ { display: 'flex' } }>
+    <div className="App" style={ { display: 'flex', flexWrap: 'wrap' } }>
        { boardPieceArray.map( ( piece ) => { 
           return <BoardPieceLayout boardPiece={ piece }/>
         })
