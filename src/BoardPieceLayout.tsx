@@ -45,8 +45,10 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece}) => {
                         gridColumn: `col ${column} / span 2`,
                         gridRow: `row ${row} / span 4`} } 
                      onClick={() => setClicked(id)}>
-                    {`id: ${id}`}
-                    {hex.getPlanetName()}
+                    <p className='display-on-top' >
+                        {`id: ${id}`}
+                        {hex.getPlanetName()}
+                    </p>
                 </div>)
             })}
         </div>
