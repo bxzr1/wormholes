@@ -23,22 +23,49 @@ const neighborsMap: { [index: number]: number[] } = {
     18: [14,15,17]
 };
 
+const edgesMap: { [index: number]: number[] } = {
+    0: [0, 1, 2],
+    1: [2, 6, 11],
+    2: [11, 15, 18],
+    3: [18, 17, 16],
+    4: [16, 12, 7],
+    5: [7, 3, 0],
+}
+
 export class BoardPiece{
     private id: number;
     private nodes: HexNode [] = [];
+    private _rotation: number;
 
     constructor(id: number, nodes: NodeDescription[]) {
         this.id = id;
+        this._rotation = 0;
         this.nodes = nodes.map((nodeDescription, index) => {
             return new HexNode(index, nodeDescription.type, nodeDescription.name);
         })
         this.setNeighbors();
     }
-
+    
+    public get rotation(): number {
+        return this._rotation;
+    }
+    
+    public edgeAtIndex(requestedEdgeIndex: number): HexNode[] {
+        const actualEdgeIndex = (requestedEdgeIndex + this._rotation) % 6;
+        return edgesMap[actualEdgeIndex].map((index) => this.nodes[index]);
+    }
+    
     public getId() { return this.id;}
-
+    
     public getNodes(){ return this.nodes;}
     
+    public rotate(): void {
+        if (this._rotation > 5) {
+            throw new Error("Something went wrong - invalid rotation reached");
+        }
+        this._rotation += 1;
+    }
+
     private setNeighbors(){ 
         this.nodes.forEach((node, index) =>{
             const neighborIndicies = neighborsMap[index];

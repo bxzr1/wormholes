@@ -19,6 +19,19 @@ export class HexNode {
         this.neighbors = neighbors;
     }
 
+    public addNeighbor(neighbor: HexNode): void {
+        if (this.neighbors.includes(neighbor))
+        {
+            return;
+        }
+
+        this.neighbors.push(neighbor);
+        neighbor.addNeighbor(this);
+    }
+
+    public addNeighbors(neighbors: HexNode[]): void {
+        neighbors.forEach(neighbor => this.addNeighbor(neighbor));
+    }
 
     public getId() {
         return this.id;
