@@ -3,6 +3,7 @@ import { HexNode } from './HexNode';
 import { NodeType, template } from './template';
 import { BoardPiece } from './BoardPiece';
 import './BoardStyle.css';
+import { spaceImages } from './image_assets/images';
 
 function findRowAndColumn(index: number): { row: number, column: number } {
     if(index < 3)
@@ -29,28 +30,51 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece}) => {
             return nodes[clicked].getNeighbors();
         else return [];
     }, [clicked]);
-    
+
     return (
         <div className='grid-container'>
             {nodes.map((hex) => {
                 const id = hex.getId();
-                const { row, column } = findRowAndColumn(id);
                 const isClicked = id === clicked;
                 const isNeighbor = neighbors.includes(nodes[id]);
-                const className = `hex ${isClicked ? 'is-clicked' : ''} ${isNeighbor ? 'is-neighbor' : ''} ${hex.getNodeType()}`;
-
-                return (
-                <div className={className} 
-                     style={ {
-                        gridColumn: `col ${column} / span 2`,
-                        gridRow: `row ${row} / span 4`} } 
-                     onClick={() => setClicked(id)}>
-                    <p className='display-on-top' >
-                        {`id: ${id}`}
-                        {hex.getPlanetName()}
-                    </p>
-                </div>)
+                return <HexPiece 
+                    hex={ hex }
+                    isNeighbor={ isNeighbor}
+                    isClicked={ isClicked }
+                    setClicked={setClicked}
+                />
             })}
         </div>
     )
+}
+
+function HexPiece( props:{ 
+    hex: HexNode, isClicked: boolean, 
+    isNeighbor: boolean, 
+    setClicked: ( index: number )=> void 
+})
+{
+    const { hex, isClicked, isNeighbor, setClicked } = props; 
+    const [ imgRandomizer, setImgRandomizer ] = useState<number>( () => Math.floor(Math.random() * 2)); //1-3 inclusive
+    
+    const id = hex.getId();
+    const { row, column } = findRowAndColumn(id);
+    const imgSrc = hex.getNodeType() === 'space' ? spaceImages[ imgRandomizer ] : ""
+    const className = `hex ${isClicked ? 'is-clicked' : ''} ${isNeighbor ? 'is-neighbor' : ''} ${hex.getNodeType()}`;
+
+
+    return (
+        <div className={className}
+            style={ {
+                gridColumn: `col ${column} / span 2`,
+                gridRow: `row ${row} / span 4`} } 
+            onClick={() => setClicked( id )}>
+            <p className='display-on-top' >
+                {`id: ${id}`}
+                {hex.getPlanetName()}
+            </p>
+            <img className='hex-background' src={ imgSrc }></img>
+
+        </div>
+    ) 
 }
