@@ -19,9 +19,10 @@ export function HexPiece( props: {
     hex: HexNode, isClicked: boolean, 
     isNeighbor: boolean,
     hexId: number,
-    setClicked: ( hex: HexNode )=> void 
+    setClicked: ( hex: HexNode )=> void,
+    rotation: number,
 }) {
-    const { hex, isClicked, isNeighbor, setClicked } = props; 
+    const { hex, isClicked, isNeighbor, setClicked, rotation } = props; 
     const [ imgRandomizer, setImgRandomizer ] = useState<number>( () => Math.floor(Math.random() * 2)); // 0-2 inclusive
     
     const id = hex.getId();
@@ -35,7 +36,8 @@ export function HexPiece( props: {
                 gridRowStart: row,
                 gridColumnStart: column,
                 gridRowEnd: 'span 4',
-                gridColumnEnd: 'span 2'
+                gridColumnEnd: 'span 2',
+                transform: `rotate(${ rotation * 60}deg)`,
              } } 
             onClick={() => setClicked( hex )}>
             <p className='display-on-top' >

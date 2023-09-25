@@ -33,21 +33,23 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
                 gridRowStart: rowAndColumn[boardPiece.getId()].row,
                 gridColumnStart: rowAndColumn[boardPiece.getId()].column,
                 gridRowEnd: 'span 15',
-                gridColumnEnd: 'span 10'
+                gridColumnEnd: 'span 10',
+                transform: `rotate(${ boardPiece.getRotation() * -60}deg)`,
             } } >
             {nodes.map((hex) => {
                 const id = hex.getId();
                 const lookupId = rotationLookup[id];
                 const nodeID = lookupId[boardPiece.getRotation()];
                 const lookup = nodes[nodeID];
-                const isClicked = lookup === clicked;
-                const isNeighbor = neighbors.includes(nodes[lookup.getId()]);
+                const isClicked = hex === clicked;
+                const isNeighbor = neighbors.includes(hex);
                 return <HexPiece 
-                    hex={ lookup } // hex={rotationLookup[hex.getId()][boardPiece.rotation]}
+                    hex={ hex } // hex={rotationLookup[hex.getId()][boardPiece.rotation]}
                     hexId = { hex.getId() } 
                     isNeighbor={ isNeighbor }
                     isClicked={ isClicked }
                     setClicked={ setClicked }
+                    rotation={ boardPiece.getRotation() }
                 />
             })}
         </div>
