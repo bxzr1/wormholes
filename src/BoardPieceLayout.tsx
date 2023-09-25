@@ -5,14 +5,14 @@ import { HexNode } from './HexNode';
 import './BoardStyle.css';
 
 const rowAndColumn = [
-    { row: 27, column: 1 },
-    { row: 10, column: 0 },
-    { row: 1, column: 7 },
-    { row: 15, column: 8 },
-    { row: 32, column: 9 },
-    { row: 49, column: 10 },
-    { row: 39, column: 17 },
-    { row: 22, column: 16 },
+    { row: 25, column: 2 },
+    { row: 10, column: 1 },
+    { row: 1, column: 8 },
+    { row: 16, column: 9 },
+    { row: 31, column: 10 },
+    { row: 46, column: 11 },
+    { row: 37, column: 18 },
+    { row: 22, column: 17 },
 ]
 
 export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNode | undefined, setClicked: (hex: HexNode) => void}) => {
@@ -30,8 +30,11 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
     return (
         <div className='grid-container-boardpiece'
             style={ {
-                gridColumn: `col ${rowAndColumn[boardPiece.getId()].column} / span 10`,
-                gridRow: `row ${rowAndColumn[boardPiece.getId()].row} / span 16`} } >
+                gridRowStart: rowAndColumn[boardPiece.getId()].row,
+                gridColumnStart: rowAndColumn[boardPiece.getId()].column,
+                gridRowEnd: 'span 15',
+                gridColumnEnd: 'span 10'
+            } } >
             {nodes.map((hex) => {
                 const id = hex.getId();
                 const isClicked = hex === clicked;

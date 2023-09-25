@@ -4,15 +4,15 @@ import { spaceImages } from './image_assets/images';
 
 function findRowAndColumn(index: number): { row: number, column: number } {
     if(index < 3)
-        return { row: 1, column: 2 + index * 2 };
+        return { row: 1, column: 3 + index * 2 };
     else if(index < 7)
-        return { row: 4, column: 1 + (index - 3)*2 };
+        return { row: 4, column: 2 + (index - 3)*2 };
     else if (index < 12)
-        return { row: 7, column: (index - 7)*2 };
+        return { row: 7, column: 1 + (index - 7)*2 };
     else if(index < 16)
-        return { row: 10, column: 1 + (index - 12)*2 };
+        return { row: 10, column: 2 + (index - 12)*2 };
     else
-        return { row: 13, column: 2 + (index - 16)*2 };
+        return { row: 13, column: 3 + (index - 16)*2 };
 }
 
 export function HexPiece( props: { 
@@ -32,8 +32,11 @@ export function HexPiece( props: {
     return (
         <div className={className}
             style={ {
-                gridColumn: `col ${column} / span 2`,
-                gridRow: `row ${row} / span 4`} } 
+                gridRowStart: row,
+                gridColumnStart: column,
+                gridRowEnd: 'span 4',
+                gridColumnEnd: 'span 2'
+             } } 
             onClick={() => setClicked( hex )}>
             <p className='display-on-top' >
                 {`id: ${id}`}
