@@ -20,7 +20,7 @@ export class HexNode {
     }
 
     public addNeighbor(neighbor: HexNode): void {
-        if (this.neighbors.includes(neighbor))
+        if (this.neighbors.includes(neighbor) || neighbor.nodeType == NodeType.unreachable || this.nodeType == NodeType.unreachable)
         {
             return;
         }

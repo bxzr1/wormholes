@@ -97,6 +97,7 @@ export class GameBoard {
             const neighborEdge = neighborPiece.edgeAtIndex(boardPieceConnection.neighborEdgeIndex);
             const thisEdge = boardPiece.edgeAtIndex(boardPieceConnection.thisEdgeIndex);
 
+            //not checking type - unreachable
             thisEdge[0].addNeighbors([neighborEdge[2], neighborEdge[1]]);
             thisEdge[1].addNeighbors([neighborEdge[1], neighborEdge[0]]);
             thisEdge[2].addNeighbors([neighborEdge[0]]);

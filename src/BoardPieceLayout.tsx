@@ -37,11 +37,11 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
             } } >
             {nodes.map((hex) => {
                 const id = hex.getId();
-                const isClicked = hex === clicked;
-                const isNeighbor = neighbors.includes(nodes[id]);
                 const lookupId = rotationLookup[id];
                 const nodeID = lookupId[boardPiece.getRotation()];
                 const lookup = nodes[nodeID];
+                const isClicked = lookup === clicked;
+                const isNeighbor = neighbors.includes(nodes[lookup.getId()]);
                 return <HexPiece 
                     hex={ lookup } // hex={rotationLookup[hex.getId()][boardPiece.rotation]}
                     hexId = { hex.getId() } 
