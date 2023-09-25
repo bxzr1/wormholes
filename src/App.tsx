@@ -1,13 +1,17 @@
 import React from 'react';
 import './App.css';
-import { GameBoard } from './GameBoardLayout';
+import { GameBoardLayout } from './GameBoardLayout';
+import { GameBoard } from './GameBoard';
 
 function App() {
-  return (
-    <div className="App" style={ { display: 'flex', flexWrap: 'wrap' } }>
-       <GameBoard />
-    </div>
-  );
+
+    const gameBoard = new GameBoard(8);
+
+    return (
+        <div className="App" style={ { display: 'flex', flexWrap: 'wrap' } }>
+            <GameBoardLayout gameBoardPieces={gameBoard.boardPieces}/>
+        </div>
+    );
 }
 
 export default App;

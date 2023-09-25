@@ -2,7 +2,7 @@
     color: white;
     background-color: rgba(0, 0, 0, 0);
     box-sizing: border-box;
-    height: 200px;
+    height: 231px;
     width: 200px;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
@@ -13,7 +13,7 @@
     position: relative;
 }
 
-.hex-background{
+.hex-background {
     content: "";
     position: absolute;
     top: -10px; /* Adjust these values to change the border thickness */
@@ -73,9 +73,18 @@
     background-color: rgb(22, 77, 33);
 }
 
-.grid-container {
+.grid-container-boardpiece {
     display: grid;
-    grid-template: repeat(16, [row] minmax(50px, 1fr)) / repeat(10, [col] minmax(100px, 1fr));
-    grid-gap: 4px;
+    grid-template-rows: 57.75px;
+    grid-template-columns: 100px;
+    /* column-gap: 6px; */
+    /* row-gap: 2px; */
 }
 
+.grid-container-gameboard {
+    display: grid;
+    grid-template-rows: 57.75px;
+    grid-template-columns: 100px;
+    /* column-gap: 6px; */
+    /* row-gap: 2px; */
+}

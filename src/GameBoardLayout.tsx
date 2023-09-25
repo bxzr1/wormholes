@@ -1,19 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BoardPieceLayout } from './BoardPieceLayout';
 import { BoardPiece } from './BoardPiece';
+import { HexNode } from './HexNode';
 import { template } from './template';
 
+export function GameBoardLayout( props: { gameBoardPieces: BoardPiece[] } ) {
 
-export function GameBoard() {
-    const boardPieceArray: BoardPiece[] = template.map((description, index) => {
-        return new BoardPiece(index, description);
-    });
-    const spaceStation = boardPieceArray[0];
+    const [ clicked, setClicked ] = useState<HexNode>();
 
     return (
-        <div className='gameBoard'>
-            { boardPieceArray.map( ( piece ) => { 
-                return <BoardPieceLayout boardPiece={ piece }/>
+        <div className='gameBoard grid-container-gameboard'>
+            { props.gameBoardPieces.map( ( piece ) => { 
+                return <BoardPieceLayout boardPiece={ piece } clicked={clicked} setClicked={setClicked}/>
             }) }
         </div>
     )

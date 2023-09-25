@@ -61,7 +61,7 @@ const edgeLookupIndices: { [key: number]: number[] } = {
 };
 
 export class GameBoard {
-    private boardPieces: BoardPiece[] = [];
+    public boardPieces: BoardPiece[] = [];
 
     constructor(numberOfPieces: number) {
         const templateIndices = Array.from(Array(template.length).keys());
@@ -71,6 +71,7 @@ export class GameBoard {
             templateIndices[i] = templateIndices[randomIndex];
             templateIndices[randomIndex] = temp;
         }
+
 
         for (let i = 0; i < numberOfPieces; i++) {
             this.addBoardPiece(new BoardPiece(i, template[templateIndices[i]]), i);
@@ -90,6 +91,9 @@ export class GameBoard {
         const boardPieceConnections = boardPieceNeighborsMap[index];
         for (const boardPieceConnection of boardPieceConnections) {
             const neighborPiece = this.boardPieces[boardPieceConnection.neighborPieceIndex];
+            if (!neighborPiece) {
+                continue;
+            }
             const neighborEdge = neighborPiece.edgeAtIndex(boardPieceConnection.neighborEdgeIndex);
             const thisEdge = boardPiece.edgeAtIndex(boardPieceConnection.thisEdgeIndex);
 
@@ -103,14 +107,17 @@ export class GameBoard {
         const boardPieceConnections = boardPieceNeighborsMap[index];
         for (const boardPieceConnection of boardPieceConnections) {
             const neighborPiece = this.boardPieces[boardPieceConnection.neighborPieceIndex];
+            if (!neighborPiece) {
+                continue;
+            }
             const neighborEdge = neighborPiece.edgeAtIndex(boardPieceConnection.neighborEdgeIndex);
             const thisEdge = boardPiece.edgeAtIndex(boardPieceConnection.thisEdgeIndex);
 
-            if (!this.validateEdge(thisEdge)) {
+            if (!this.validateEdge(thisEdge, neighborEdge)) {
                 return false;
             }
             
-            if (!this.validateEdge(neighborEdge)) {
+            if (!this.validateEdge(neighborEdge, thisEdge)) {
                 return false;
             }
         }
@@ -118,7 +125,7 @@ export class GameBoard {
         return true;
     }
 
-    private validateEdge(edge: HexNode[]): boolean {
+    private validateEdge(edge: HexNode[], neighborEdge: HexNode[]): boolean {
         const edgePlanetIndices = edge.map((edgeNode, index) => {
             if (edgeNode.getNodeType() === NodeType.planet) {
                 return index;
@@ -132,7 +139,7 @@ export class GameBoard {
                 continue;
             }
             
-            if (!this.validateIfNearPlanet(edgeLookupIndices[edgePlanetIndex].map(index => edge[index]))) {
+            if (!this.validateIfNearPlanet(edgeLookupIndices[edgePlanetIndex].map(index => neighborEdge[index]))) {
                 return false;
             }
         }

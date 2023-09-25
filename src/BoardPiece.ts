@@ -32,6 +32,28 @@ const edgesMap: { [index: number]: number[] } = {
     5: [7, 3, 0],
 }
 
+export const rotationLookup: { [index: number]: number[] } = {
+    0:[0, 2, 11, 18, 16, 7],
+    1:[1, 6, 15, 17, 12, 3],
+    2:[2, 11, 18, 16, 7, 0],
+    3:[3, 1, 6, 15, 17, 12],
+    4:[4, 5, 10, 14, 13, 8],
+    5:[5, 10, 14, 13, 8, 4],
+    6:[6, 15, 17, 12, 3, 1],
+    7:[7, 0, 2, 11, 18, 16],
+    8:[8, 4, 5, 10, 14, 13],
+    9:[9, 9, 9, 9, 9, 9, 9],
+    10:[10, 14, 13, 8, 4, 5],
+    11:[11, 18, 16, 7, 0, 2],
+    12:[12, 3, 1, 6, 15, 17],
+    13:[13, 8, 4, 5, 10, 14],
+    14:[14, 13, 8, 4, 5, 10],
+    15:[15, 17, 12, 3, 1, 6],
+    16:[16, 7, 0, 2, 11, 18],
+    17:[17, 12, 3, 1, 6, 15],
+    18:[18, 16, 7, 0, 2, 11]
+}
+
 export class BoardPiece{
     private id: number;
     private nodes: HexNode [] = [];
@@ -50,16 +72,18 @@ export class BoardPiece{
         return this._rotation;
     }
     
-    public edgeAtIndex(requestedEdgeIndex: number): HexNode[] {
+    edgeAtIndex = (requestedEdgeIndex: number): HexNode[] => {
         const actualEdgeIndex = (requestedEdgeIndex + this._rotation) % 6;
         return edgesMap[actualEdgeIndex].map((index) => this.nodes[index]);
     }
     
-    public getId() { return this.id;}
+    getId = () => { return this.id;}
+
+    getNodes = () => { return this.nodes;}
+
+    getRotation = () => { return this._rotation;}
     
-    public getNodes(){ return this.nodes;}
-    
-    public rotate(): void {
+    rotate = (): void => {
         if (this._rotation > 5) {
             throw new Error("Something went wrong - invalid rotation reached");
         }
