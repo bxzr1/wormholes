@@ -42,7 +42,7 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
                 const lookup = nodes[nodeID];
                 const isClicked = lookup === clicked;
                 const isNeighbor = neighbors.includes(nodes[lookup.getId()]);
-                return <HexPiece 
+                return <HexPiece
                     hex={ lookup } // hex={rotationLookup[hex.getId()][boardPiece.rotation]}
                     hexId = { hex.getId() } 
                     isNeighbor={ isNeighbor }

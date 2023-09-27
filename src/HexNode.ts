@@ -1,16 +1,17 @@
-import { NodeType } from "./template";
+import { NodeType, PlanetTypes, isUnreachable } from "./template";
 
 export class HexNode {
 
     private id: number;
     private nodeType: NodeType;
-    private isPlanet: boolean;
     private neighbors: HexNode [] = [];
-    private planetName: string | undefined = undefined;
+    private isPlanet: boolean;
+    private planetName: PlanetTypes | undefined;
 
-    constructor(id: number, nodeType: NodeType, planetName?: string) {
+    constructor(id: number, nodeType: NodeType, planetName?: PlanetTypes) {
         this.id = id;
         this.nodeType = nodeType;
+        
         this.isPlanet = nodeType === NodeType.planet;
         this.planetName = planetName;
     }
@@ -20,7 +21,7 @@ export class HexNode {
     }
 
     public addNeighbor(neighbor: HexNode): void {
-        if (this.neighbors.includes(neighbor) || neighbor.nodeType == NodeType.unreachable || this.nodeType == NodeType.unreachable)
+        if (this.neighbors.includes(neighbor) || isUnreachable(neighbor.nodeType) || isUnreachable(this.nodeType))
         {
             return;
         }
@@ -53,4 +54,5 @@ export class HexNode {
     public getNodeType(){
         return this.nodeType;
     }
+
 }

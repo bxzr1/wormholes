@@ -1,5 +1,6 @@
+import { isUnionTypeNode } from "typescript";
 import { HexNode } from "./HexNode";
-import { NodeType, NodeDescription} from "./template";
+import { NodeType, NodeDescription, isUnreachable} from "./template";
 
 const neighborsMap: { [index: number]: number[] } = {
     0: [1,3,4],
@@ -89,6 +90,7 @@ export class BoardPiece{
         this._rotation = 0;
         this.nodes = nodes.map((nodeDescription, index) => {
             return new HexNode(index, nodeDescription.type, nodeDescription.name);
+        
         })
         this.setNeighbors();
     }
@@ -123,7 +125,7 @@ export class BoardPiece{
             });
 
             const reachableNeighbors = mappedIndicies.filter((hexNode) => {
-                return hexNode.getNodeType() !== NodeType.unreachable;
+                return !isUnreachable(hexNode.getNodeType());
             });
 
             node.setNeighbors(reachableNeighbors);
