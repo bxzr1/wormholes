@@ -35,8 +35,8 @@
 }
 
 .hex.is-neighbor {
-    border: 20px solid rgb(112, 112, 249);
-    background-color: rgb(112, 112, 249);
+    border: 20px solid rgb(32, 235, 170);
+    background-color: rgb(32, 235, 170);
 }
 
 .hex.star {

@@ -5,9 +5,9 @@ import { PlanetTypes} from './template';
 import { spaceImages } from './image_assets/images';
 import { nebulaImages } from './image_assets/images';
 import { asteroidImages } from './image_assets/images';
-import { cannonImages } from './image_assets/images';
+import { cannonImage } from './image_assets/images';
 import { sunImages } from './image_assets/images';
-import { stationImage } from './image_assets/images';
+import { spaceStation } from './image_assets/images';
 import { planetImages } from './image_assets/images';
 
 function findRowAndColumn(index: number): { row: number, column: number } {
@@ -37,10 +37,10 @@ function generateBackgrounds(nodeType: NodeType, name?: PlanetTypes): string {
         return sunImages[ Math.floor(Math.random() * (sunImages.length)) ];
     
     else if(nodeType === NodeType.station)
-        return stationImage;
+        return spaceStation;
     
     else if(nodeType === NodeType.cannon)
-        return cannonImages[ Math.floor(Math.random() * (cannonImages.length)) ];
+        return cannonImage[ Math.floor(Math.random() * (cannonImage.length)) ];
 
     else if(nodeType === NodeType.planet && name)
         return planetImages[name];
@@ -73,7 +73,6 @@ export function HexPiece( props: {
             <p className='display-on-top' >
                 {`id: ${id}`}
                 {hex.getPlanetName()}
-
             </p>
             <img className='hex-background' src={ imgUrl }></img>
 

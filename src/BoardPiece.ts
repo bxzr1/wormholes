@@ -112,6 +112,7 @@ export class BoardPiece{
     
     rotate = (): void => {
         if (this._rotation > 5) {
+            
             throw new Error("Something went wrong - invalid rotation reached");
         }
         this._rotation += 1;
