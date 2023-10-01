@@ -12,6 +12,11 @@ Edge representation on board piece class
 Game board class + putting pieces together algorithmically
 space gun + orbits updated neighbor logic
 
+Week 5: 
+1) random default rotations
+2) Space gun neighbors - alex mini project
+3) 
+
 Later: 
 Passenger classes, victory conditions
 hotseat player classes + behaviors (wormholes, passengers, fuel, pickup/dropoff, position)
