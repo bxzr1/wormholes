@@ -35,21 +35,23 @@
 }
 
 .hex.is-neighbor {
-    border: 20px solid rgb(112, 112, 249);
-    background-color: rgb(112, 112, 249);
+    border: 20px solid rgb(32, 235, 170);
+    background-color: rgb(32, 235, 170);
 }
 
-.hex.unreachable::after {
-    background-color: gray;
-}
-
-.hex.unreachable {
+.hex.star {
     cursor: not-allowed;
     pointer-events: none;
 }
 
-.hex.space.hex-background{
-    background-color: rgb(31, 0, 31);
+.hex.station {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.hex.asteroid {
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .hex.planet::after {
