@@ -84,10 +84,12 @@ export class BoardPiece{
     private id: number;
     private nodes: HexNode [] = [];
     private _rotation: number;
+    private templateIndex: number;
 
-    constructor(id: number, nodes: NodeDescription[]) {
+    constructor(id: number, templateIndex: number, nodes: NodeDescription[], rotation: number) {
         this.id = id;
-        this._rotation = 0;
+        this._rotation = rotation;
+        this.templateIndex = templateIndex;
         this.nodes = nodes.map((nodeDescription, index) => {
             return new HexNode(index, nodeDescription.type, nodeDescription.name);
         
@@ -109,13 +111,11 @@ export class BoardPiece{
     getNodes = () => { return this.nodes;}
 
     getRotation = () => { return this._rotation;}
+
+    getTemplateIndex = () => { return this.templateIndex }
     
     rotate = (): void => {
-        if (this._rotation > 5) {
-            
-            throw new Error("Something went wrong - invalid rotation reached");
-        }
-        this._rotation += 1;
+        this._rotation = (this._rotation + 1) % 6;
     }
 
     private setNeighbors(){ 

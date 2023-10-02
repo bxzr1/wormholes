@@ -10,8 +10,8 @@ export function GameBoardLayout( props: { gameBoardPieces: BoardPiece[] } ) {
 
     return (
         <div className='gameBoard grid-container-gameboard'>
-            { props.gameBoardPieces.map( ( piece ) => { 
-                return <BoardPieceLayout boardPiece={ piece } clicked={clicked} setClicked={setClicked}/>
+            { props.gameBoardPieces.map( ( piece, index ) => { 
+                return <BoardPieceLayout boardPiece={ piece } clicked={ clicked } setClicked={ setClicked } key={ index }/>
             }) }
         </div>
     )

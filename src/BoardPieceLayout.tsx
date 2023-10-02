@@ -48,6 +48,7 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
                     isNeighbor={ isNeighbor }
                     isClicked={ isClicked }
                     setClicked={ setClicked }
+                    key={ id }
                 />
             })}
         </div>

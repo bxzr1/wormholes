@@ -8,6 +8,11 @@ interface BoardPieceConnection {
     thisEdgeIndex: number;
 }
 
+interface BoardPieceData {
+    templateIndex: number,
+    rotation: number
+}
+
 const boardPieceNeighborsMap: { [key: number]: BoardPieceConnection[] } = {
     // Connection object for each of these
     0: [
@@ -63,26 +68,67 @@ const edgeLookupIndices: { [key: number]: number[] } = {
 export class GameBoard {
     public boardPieces: BoardPiece[] = [];
 
-    constructor(numberOfPieces: number) {
+    // constructor() {
+    // }
+
+    toJson = (): string => {
+        const resultArray: BoardPieceData[]= [];
+        for (let i = 0; i < this.boardPieces.length; i++) {
+            resultArray.push({ templateIndex: this.boardPieces[i].getTemplateIndex(),
+                rotation: this.boardPieces[i].getRotation() })
+        }
+
+        return JSON.stringify(resultArray);
+    }
+
+    generateGameBoard = (numberOfPieces: number) => {
+        let templateIndex = 0;
+        let templateIndices = this.randomizeArray();
+        
+        while (this.boardPieces.length < numberOfPieces) {  
+            const placementIndex = this.boardPieces.length;
+            this.addBoardPiece(new BoardPiece(placementIndex, templateIndex, template[templateIndices[templateIndex]], Math.floor(Math.random() * 5)), placementIndex);
+            templateIndex += 1;
+            
+            if (templateIndex >= templateIndices.length) {
+                templateIndices = this.randomizeArray();
+                templateIndex = 0;
+                this.boardPieces = [];
+            }
+        }
+
+        sessionStorage.setItem("gameBoard", this.toJson());
+    }
+
+    loadGameBoard = (data: BoardPieceData[]) => {
+        for (let i = 0; i < data.length; i++) {
+            this.addBoardPiece(new BoardPiece(i, data[i].templateIndex, template[data[i].templateIndex], data[i].rotation), i);
+        }
+    }
+
+    private randomizeArray() {
         const templateIndices = Array.from(Array(template.length).keys());
+
         for (let i = template.length - 1; i > 0; i--) {
             const randomIndex = Math.floor(Math.random() * (i + 1)) + 1;
             const temp = templateIndices[i];
             templateIndices[i] = templateIndices[randomIndex];
             templateIndices[randomIndex] = temp;
         }
-
-
-        for (let i = 0; i < numberOfPieces; i++) {
-            this.addBoardPiece(new BoardPiece(i, template[templateIndices[i]]), i);
-        }
+        return templateIndices;
     }
 
     public addBoardPiece(boardPiece: BoardPiece, index: number) {
-        while (!this.validateBoardPiece(boardPiece, index)) {
+        let numRotations = 0;
+        let isValid = this.validateBoardPiece(boardPiece, index);
+        while (!isValid && numRotations < 6) {
             boardPiece.rotate();
+            numRotations += 1;
+            isValid = this.validateBoardPiece(boardPiece, index);
         }
-
+        if (numRotations >= 6) {
+            return;
+        }
         this.linkBoardPiece(boardPiece, index);
         this.boardPieces[index] = boardPiece;
     }
