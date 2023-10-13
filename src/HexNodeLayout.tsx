@@ -7,7 +7,7 @@ import { nebulaImages } from './image_assets/images';
 import { asteroidImages } from './image_assets/images';
 import { cannonImage } from './image_assets/images';
 import { sunImages } from './image_assets/images';
-import { spaceStation } from './image_assets/images';
+import { stationImages } from './image_assets/images';
 import { planetImages } from './image_assets/images';
 
 function findRowAndColumn(index: number): { row: number, column: number } {
@@ -24,6 +24,7 @@ function findRowAndColumn(index: number): { row: number, column: number } {
 }
 
 function generateBackgrounds(nodeType: NodeType, name?: PlanetTypes): string {
+    
     if(nodeType === NodeType.space)
         return spaceImages[ Math.floor(Math.random() * (spaceImages.length)) ];
     
@@ -37,8 +38,11 @@ function generateBackgrounds(nodeType: NodeType, name?: PlanetTypes): string {
         return sunImages[ Math.floor(Math.random() * (sunImages.length)) ];
     
     else if(nodeType === NodeType.station)
-        return spaceStation;
+        return stationImages[0];
     
+    else if(nodeType === NodeType.orbit)
+        return stationImages[1];
+
     else if(nodeType === NodeType.cannon)
         return cannonImage[ Math.floor(Math.random() * (cannonImage.length)) ];
 

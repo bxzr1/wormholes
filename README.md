@@ -15,7 +15,7 @@ space gun + orbits updated neighbor logic [ ]
 Week 5: 
 Random default rotations [x]
 Space gun neighbors - alex mini project [ ]
-Set up local storage [ ]
+Set up session storage [x]
 
 Later: 
 Passenger classes, victory conditions
