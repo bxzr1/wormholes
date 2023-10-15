@@ -115,7 +115,7 @@ export class BoardPiece{
     getTemplateIndex = () => { return this.templateIndex }
     
     rotate = (): void => {
-        this._rotation = (this._rotation + 1) % 6;
+        this._rotation = (this._rotation) % 6; //+1?
     }
 
     private setNeighbors(){ 

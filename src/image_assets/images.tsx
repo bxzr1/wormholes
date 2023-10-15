@@ -33,7 +33,14 @@ export const planet_YellowJupiter = require('./planet_images/planet_YellowJupite
 export const planet_PurpleEye = require('./planet_images/planet_PurpleEye.png');
 
 export const spaceStation = require('./station.png');
-export const stationOrbit = require('./station_orbit.png');
+
+export const orbit_TopLeft = require('./orbit_images/orbit_TopLeft.png');
+export const orbit_TopRight = require('./orbit_images/orbit_TopRight.png');
+export const orbit_CenterLeft = require('./orbit_images/orbit_CenterLeft.png');
+export const orbit_CenterRight = require('./orbit_images/orbit_CenterRight.png');
+export const orbit_BottomLeft = require('./orbit_images/orbit_BottomLeft.png');
+export const orbit_BottomRight = require('./orbit_images/orbit_BottomRight.png');
+
 export const spaceCannon = require('./space_gun.png');
 
 export const spaceImages = [
@@ -53,8 +60,17 @@ export const cannonImage = [
 ]
 
 export const stationImages = [
-    spaceStation, stationOrbit
+    spaceStation,
 ]
+
+export const orbitImages: {[ id: number] : string}= {
+    4 : orbit_TopLeft,
+    5 : orbit_TopRight,
+    8 : orbit_CenterLeft,
+    10 : orbit_CenterRight,
+    13 : orbit_BottomLeft,
+    14 : orbit_BottomRight,
+}
 
 export const sunImages = [
     sun_1, sun_2, sun_3, sun_4, sun_5, sun_6,sun_7, sun_8,

@@ -49,6 +49,7 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
                     isClicked={ isClicked }
                     setClicked={ setClicked }
                     key={ id }
+                    rotation={boardPiece.getRotation()}
                 />
             })}
         </div>
