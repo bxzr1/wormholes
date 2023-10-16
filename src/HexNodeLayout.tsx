@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useLayoutEffect } from 'react'
 import { HexNode } from './HexNode';
 import { NodeType } from './template';
 import { PlanetTypes} from './template';
@@ -24,7 +24,6 @@ function findRowAndColumn(index: number): { row: number, column: number } {
 }
 
 function generateBackgrounds(nodeType: NodeType, name?: PlanetTypes): string {
-    
     if(nodeType === NodeType.space)
         return spaceImages[ Math.floor(Math.random() * (spaceImages.length)) ];
     
@@ -64,9 +63,21 @@ export function HexPiece( props: {
     const id = hex.getId();
     const { row, column } = findRowAndColumn(props.hexId);
     const className = `hex ${isClicked ? 'is-clicked' : ''} ${isNeighbor ? 'is-neighbor' : ''} ${hex.getNodeType()}`;
+    const hexNodeDiv = useRef<HTMLDivElement>(null);
+    
+    useLayoutEffect(() => {
+        const boundingRectangle = hexNodeDiv?.current?.getBoundingClientRect();
+        if (boundingRectangle === undefined) {
+            return;
+        }
+
+        hex.hexNodeCenterX = boundingRectangle.x + boundingRectangle.width/2;
+        hex.hexNodeCenterY = boundingRectangle.y + boundingRectangle.height/2;
+    }, [hex]);
 
     return (
         <div className={className}
+            ref={hexNodeDiv}  
             style={ {
                 gridRowStart: row,
                 gridColumnStart: column,
@@ -78,8 +89,7 @@ export function HexPiece( props: {
                 {`id: ${id}`}
                 {hex.getPlanetName()}
             </p>
-            <img className='hex-background' src={ imgUrl }></img>
-
+            <img className='hex-background' src={ imgUrl } alt=''></img>
         </div>
     ) 
 }

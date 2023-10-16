@@ -7,6 +7,8 @@ export class HexNode {
     private neighbors: HexNode [] = [];
     private isPlanet: boolean;
     private planetName: PlanetTypes | undefined;
+    private _hexNodeCenterX: number | null = null;
+    private _hexNodeCenterY: number | null = null;
 
     constructor(id: number, nodeType: NodeType, planetName?: PlanetTypes) {
         this.id = id;
@@ -14,6 +16,22 @@ export class HexNode {
         
         this.isPlanet = nodeType === NodeType.planet;
         this.planetName = planetName;
+    }
+
+    public set hexNodeCenterX(x: number | null) {
+        this._hexNodeCenterX = x;
+    }
+
+    public get hexNodeCenterX(): number | null {
+        return this._hexNodeCenterX;
+    }
+    
+    public set hexNodeCenterY(y: number | null) {
+        this._hexNodeCenterY = y;
+    }
+
+    public get hexNodeCenterY(): number | null {
+        return this._hexNodeCenterY;
     }
 
     public setNeighbors(neighbors: HexNode []) {

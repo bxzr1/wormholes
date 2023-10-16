@@ -1,6 +1,5 @@
-import { isUnionTypeNode } from "typescript";
 import { HexNode } from "./HexNode";
-import { NodeType, NodeDescription, isUnreachable} from "./template";
+import { NodeDescription, isUnreachable} from "./template";
 
 const neighborsMap: { [index: number]: number[] } = {
     0: [1,3,4],

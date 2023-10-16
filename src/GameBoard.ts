@@ -68,9 +68,6 @@ const edgeLookupIndices: { [key: number]: number[] } = {
 export class GameBoard {
     public boardPieces: BoardPiece[] = [];
 
-    // constructor() {
-    // }
-
     toJson = (): string => {
         const resultArray: BoardPieceData[]= [];
         for (let i = 0; i < this.boardPieces.length; i++) {

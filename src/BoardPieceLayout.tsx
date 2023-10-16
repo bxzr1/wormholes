@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { HexPiece } from './HexNodeLayout';
 import { BoardPiece, rotationLookup } from './BoardPiece';
 import { HexNode } from './HexNode';
@@ -25,7 +25,7 @@ export const BoardPieceLayout = (props: {boardPiece: BoardPiece, clicked: HexNod
         if (clicked) 
             return clicked.getNeighbors();
         else return [];
-    }, [clicked, nodes]);
+    }, [clicked]);
 
     return (
         <div className='grid-container-boardpiece'

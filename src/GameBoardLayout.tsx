@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BoardPieceLayout } from './BoardPieceLayout';
 import { BoardPiece } from './BoardPiece';
 import { HexNode } from './HexNode';
-import { template } from './template';
 
 export function GameBoardLayout( props: { gameBoardPieces: BoardPiece[] } ) {
 
