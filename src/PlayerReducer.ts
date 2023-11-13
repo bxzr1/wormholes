@@ -5,21 +5,21 @@ import { RootState } from "./store";
 
 interface PlayerState {
     currentPlayer: number;
-    players: Map<string, Player>;
+    players: {[playerName: string ] : Player};
 }
 
 const playerSlice = createSlice({
     name: 'playerState',
     initialState: {
         currentPlayer: -1,
-        players: new Map()
+        players: {}
     },
     reducers: {
         addPlayer: (state: PlayerState, action: { payload: Player }) => {
-            state.players.set(action.payload.getName(), action.payload);
+            state.players[action.payload.getName()] = action.payload;
         },
         movePlayer: (state: PlayerState, action: { payload: { playerName: string, hex: HexNode } }) => {
-            const player = state.players.get(action.payload.playerName);
+            const player = state.players[action.payload.playerName];
             if (player) {
                 player.setHex(action.payload.hex);
             }
@@ -27,8 +27,8 @@ const playerSlice = createSlice({
     }
 })
 
-export const selectPlayers = (state: RootState) => state.playerState.players;
-export const selectNumPlayers = (state: RootState) => state.playerState.players.size;
+export const selectPlayers = (state: RootState): { [ playerName: string] : Player} => state.playerState.players;
+export const selectNumPlayers = (state: RootState) => Object.keys(state.playerState.players).length;
 export const { addPlayer, movePlayer } = playerSlice.actions;
 
 export default playerSlice.reducer;

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Player } from './Player';
+import { useDispatch } from 'react-redux';
+import { addPlayer } from './PlayerReducer';
 
-export function PreGameLogic(props: { setPlayers: (players: Player[]) => void}) {
+export function PreGameLogic() {
+
+    const dispatch = useDispatch();
     
     const [numPlayers, setNumPlayers] = useState<number>(2);
     const [isErrorShowing, setIsErrorShowing] = useState(false);
@@ -17,11 +21,9 @@ export function PreGameLogic(props: { setPlayers: (players: Player[]) => void}) 
     }
 
     const handleStartGame = () => {
-        const players = [];
         for (let i=0; i<numPlayers; i++) {
-            players.push(new Player(`Player ${i+1}`));
+            dispatch(addPlayer(new Player(`Player ${i+1}`)))
         }
-        props.setPlayers(players);
     };
 
     return (

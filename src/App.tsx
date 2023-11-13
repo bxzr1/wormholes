@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useSelector } from "react-redux";
 import { GameBoardLayout } from './GameBoardLayout';
 import { GameBoard } from './GameBoard';
 import { PreGameLogic } from './PreGameLogic';
 import { InGameLogic } from './InGameLogic';
 import { Player } from './Player';
+import { selectPlayers, selectNumPlayers } from "./PlayerReducer";
 
 function App() {
 
     const [gameBoard, setGameBoard] = useState<GameBoard>();
-    const [players, setPlayers] = useState<Player[]>([]);
-    
+    const numPlayers = useSelector(selectNumPlayers);
+
     useEffect(() => {
         const storedGameBoard = sessionStorage.getItem("gameBoard");
         const board = new GameBoard();
@@ -29,10 +31,10 @@ function App() {
     
     return (
         <div className="App" style={ { width: '100vw', height: '100vh', display: 'flex', flexWrap: 'wrap', fontSize: '36px' } }>
-            { players.length
+            { numPlayers
                 ? <><GameBoardLayout gameBoardPieces={gameBoard.boardPieces}/>
-                  <InGameLogic players={players}/></>
-                : <PreGameLogic setPlayers={setPlayers}/> }
+                  <InGameLogic/></>
+                : <PreGameLogic/> }
         </div>
     );
 }

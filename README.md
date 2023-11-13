@@ -16,6 +16,9 @@ Random default rotations [x]
 Space gun (+orbits?) updated neighbor logic - alex mini project [ ]
 Set up session storage [x]
 
+11/13/2023:
+*Split to use Mobx
+
 Later: 
 Passenger classes, victory conditions
 Hotseat player classes + behaviors (wormholes, passengers, fuel, pickup/drop off, position)
