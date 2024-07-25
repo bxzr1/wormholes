@@ -12,6 +12,7 @@
     position: relative;
     pointer-events: auto;
     cursor: pointer;
+    border: 10px solid transparent;
 }
 
 .hex-background {
