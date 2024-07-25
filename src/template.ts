@@ -13,7 +13,7 @@ export const enum NodeType
 
 export function isUnreachable( nodeType: NodeType )
 {
-    return nodeType === NodeType.asteroid || nodeType === NodeType.star || nodeType === NodeType.station
+    return nodeType === NodeType.asteroid || nodeType === NodeType.star || nodeType === NodeType.station || nodeType === NodeType.planet
 }
 
 export const enum PlanetTypes
