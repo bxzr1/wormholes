@@ -2,8 +2,8 @@
     color: white;
     background-color: rgba(0, 0, 0, 0);
     box-sizing: border-box;
-    height: 200px;
-    width: 180px;
+    height: 231px;
+    width: 200px;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
     flex-direction: column;
@@ -12,7 +12,6 @@
     position: relative;
     pointer-events: auto;
     cursor: pointer;
-    border: 10px solid transparent;
 }
 
 .hex-background {
@@ -25,7 +24,6 @@
     background-color: rgb(0, 0, 0);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     object-fit: none;
-    cursor: pointer;
 }
 
 .display-on-top {
@@ -44,17 +42,14 @@
 
 .hex.star {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.station {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.asteroid {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.planet::after {
@@ -63,7 +58,6 @@
 
 .hex.planet {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.nebula::after {
@@ -80,16 +74,14 @@
 
 .grid-container-boardpiece {
     display: grid;
-    grid-auto-rows: 50px;
-    grid-auto-columns: 90px;
-    grid-gap: 5px;
-    padding-bottom: 90%;
-    pointer-events: none;
+    grid-auto-rows: 57.75px;
+    grid-auto-columns: 100px;
+    grid-gap: 6px;
 }
 
 .grid-container-gameboard {
     display: grid;
-    grid-auto-rows: 50px;
-    grid-auto-columns: 90px;
-    grid-gap: 5px;
+    grid-auto-rows: 57.75px;
+    grid-auto-columns: 100px;
+    grid-gap: 6px;
 }

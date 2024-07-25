@@ -147,3 +147,11 @@ export function GetBoardPieceEdgeIndices( boardPiece: BoardPiece_t, requestedEdg
     const actualEdgeIndex = (requestedEdgeIndex + boardPiece.rotation) % 6;
     return edgesMap[actualEdgeIndex];
 }
+
+export function GetRotatedNodeAtID( sourceNodeID: number, boardPiece: BoardPiece_t )
+{
+    const lookupId = rotationLookup[sourceNodeID];
+    const nodeID = lookupId[boardPiece.rotation];
+    const rotatedNode = boardPiece.nodes[nodeID];
+    return rotatedNode;
+}

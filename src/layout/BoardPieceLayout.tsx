@@ -1,6 +1,6 @@
 import React from 'react';
 import { HexPiece } from './HexNodeLayout';
-import { BoardPiece_t } from '../gameboard/BoardPiece';
+import { BoardPiece_t, GetRotatedNodeAtID } from '../gameboard/BoardPiece';
 import { HexLocation_t } from '../gameboard/HexNode';
 import './BoardStyle.css';
 import { selectHexNode } from '../reducers/BoardReducer';
@@ -23,6 +23,7 @@ export const BoardPieceLayout = (props: {
     setSelectedLocation: ( hex: HexLocation_t ) => void 
 }) => {
     const { boardPiece, selectedLocation, setSelectedLocation } = props;
+    const nodeKeys = Object.keys( boardPiece.nodes ); 
     const selectedNode = useSelector( selectHexNode( selectedLocation ) );
 
     return (
@@ -31,23 +32,25 @@ export const BoardPieceLayout = (props: {
                 gridRowStart: rowAndColumn[boardPiece.boardPieceID ].row,
                 gridColumnStart: rowAndColumn[boardPiece.boardPieceID].column,
                 gridRowEnd: 'span 15',
-                gridColumnEnd: 'span 10',
-                transform: `rotate(${ boardPiece.rotation * -60}deg)`,
+                gridColumnEnd: 'span 10'
             } } >
-            {Object.values( boardPiece.nodes ).map(( node ) => {
-                const isClicked = selectedLocation && node.nodeID === selectedLocation.hexNodeID && boardPiece.boardPieceID === selectedLocation.boardPieceID;
-                const isNeighborOfSelected = selectedNode ? selectedNode.neighborLocations.findIndex(( neighbor ) => neighbor.boardPieceID === boardPiece.boardPieceID && neighbor.hexNodeID === node.nodeID ) > -1 : false;
-                return <HexPiece
-                    boardPieceID={ boardPiece.boardPieceID }
-                    node={ node }
-                    hexId = { node.nodeID } 
-                    isNeighbor={ isNeighborOfSelected }
-                    isSelected={ !!isClicked }
-                    setSelectedLocation={ setSelectedLocation }
-                    key={ node.nodeID }
-                    boardPieceRotation={ boardPiece.rotation }
+            { nodeKeys.map(( gridID ) => 
+                {
+                    const node = GetRotatedNodeAtID( parseInt( gridID ), boardPiece );
+                    const isClicked = selectedLocation && node.nodeID === selectedLocation.hexNodeID && boardPiece.boardPieceID === selectedLocation.boardPieceID;
+                    const isNeighborOfSelected = selectedNode ? selectedNode.neighborLocations.findIndex(( neighbor ) => neighbor.boardPieceID === boardPiece.boardPieceID && neighbor.hexNodeID === node.nodeID ) > -1 : false;
+                    return <HexPiece
+                        boardPieceID={ boardPiece.boardPieceID }
+                        node={ node }
+                        gridID = { parseInt( gridID ) } 
+                        isNeighbor={ isNeighborOfSelected }
+                        isSelected={ !!isClicked }
+                        setSelectedLocation={ setSelectedLocation }
+                        key={ node.nodeID }
+                        boardPieceRotation={ boardPiece.rotation }
                 />
-            })}
+                })
+            }
         </div>
     )
 }

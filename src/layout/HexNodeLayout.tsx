@@ -1,7 +1,7 @@
 import { useState, useRef, useLayoutEffect } from 'react'
 import { HexNode_t, HexLocation_t } from '../gameboard/HexNode';
 import { spaceImages, nebulaImages, asteroidImages, sunImages, stationImages, cannonImage, planetImages } from '../image_assets/images';
-import { NodeType, PlanetTypes } from '../template';
+import { isUnreachable, NodeType, PlanetTypes } from '../template';
 
 
 function findRowAndColumn(index: number): { row: number, column: number } {
@@ -49,16 +49,16 @@ function generateBackgrounds(nodeType: NodeType, name?: PlanetTypes): string {
 export function HexPiece( props: {
     boardPieceID: number,
     boardPieceRotation: number,
-    node: HexNode_t, 
+    node: HexNode_t,
+    gridID: number,
     isSelected: boolean, 
     isNeighbor: boolean,
-    hexId: number,
     setSelectedLocation: ( hexLocation: HexLocation_t )=> void 
 }) {
-    const { boardPieceID, boardPieceRotation, node, isSelected, isNeighbor, setSelectedLocation } = props;
+    const { boardPieceID, gridID, node, isSelected, isNeighbor, setSelectedLocation } = props;
     const [ imgUrl ] = useState<string>( () => generateBackgrounds(node.nodeType, node.planetName ));  
     const nodeID = node.nodeID;
-    const { row, column } = findRowAndColumn(props.hexId);
+    const { row, column } = findRowAndColumn(gridID);
     const className = `hex ${isSelected ? 'is-clicked' : ''} ${isNeighbor ? 'is-neighbor' : ''} ${node.nodeType}`;
     const hexNodeDiv = useRef<HTMLDivElement>(null);
     
@@ -67,7 +67,17 @@ export function HexPiece( props: {
         if (boundingRectangle === undefined) {
             return;
         }
+
+        // node.hexNodeCenterX = boundingRectangle.x + boundingRectangle.width/2;
+        // node.hexNodeCenterY = boundingRectangle.y + boundingRectangle.height/2;
     }, [node]);
+
+    const onClick = () => {
+        if( !isUnreachable( node.nodeType ) )
+        {
+            setSelectedLocation( { boardPieceID, hexNodeID: nodeID } )
+        }
+    }
 
     return (
         <div className={className}
@@ -76,11 +86,10 @@ export function HexPiece( props: {
                 gridRowStart: row,
                 gridColumnStart: column,
                 gridRowEnd: 'span 4',
-                gridColumnEnd: 'span 2',
-                transform: `rotate(${ boardPieceRotation * 60}deg)`,
+                gridColumnEnd: 'span 2'
 
              } } 
-            onClick={() => setSelectedLocation( { boardPieceID, hexNodeID: nodeID } )}>
+            onClick={onClick}>
             <p className='display-on-top' >
                 {`id: ${nodeID}`}
                 {node.planetName}
