@@ -1,4 +1,4 @@
-import { HexNode_t } from "./HexNode";
+import { HexNode_t } from "./hexnodeutils";
 import { NodeDescription, isUnreachable } from "../template";
 
 const neighborsMap: { [index: number]: number[] } = {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { BoardPieceLayout } from './BoardPieceLayout';
-import { HexLocation_t } from '../gameboard/HexNode';
-import { BoardPieceMap_t } from '../gameboard/GameBoard';
+import { HexLocation_t } from '../utils/hexnodeutils';
+import { BoardPieceMap_t } from '../utils/gameboardutils';
+import styles from './GameBoardStyles.module.scss';
 
 export function GameBoardLayout( props: { gameBoardPieces: BoardPieceMap_t } ) 
 {
@@ -9,7 +10,7 @@ export function GameBoardLayout( props: { gameBoardPieces: BoardPieceMap_t } )
     const [ selectedLocation, setSelectedLocation ] = useState<HexLocation_t>();
 
     return (
-        <div className='gameBoard grid-container-gameboard'>
+        <div className={ styles.GridContainerGameboard }>
             { Object.values( gameBoardPieces ).map( ( piece, index ) => { 
                 return <BoardPieceLayout boardPiece={ piece } selectedLocation={ selectedLocation } setSelectedLocation={ setSelectedLocation } key={ index }/>
             }) }

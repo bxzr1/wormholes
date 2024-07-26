@@ -1,0 +1,14 @@
+.GameSession {
+  text-align: center;
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  flex-wrap: wrap; 
+  font-size: 36px;
+}
+
+.ResetButton {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}

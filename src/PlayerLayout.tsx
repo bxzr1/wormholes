@@ -1,4 +1,4 @@
-import { Player_t } from './Player';
+import { Player_t } from './utils/playerutils';
 
 export function PlayerLayout ( props: { player: Player_t }) {
     
