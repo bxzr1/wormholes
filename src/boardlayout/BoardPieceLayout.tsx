@@ -1,8 +1,8 @@
 import React from 'react';
 import { HexPiece } from './HexNodeLayout';
-import { BoardPiece_t, GetRotatedNodeAtID } from '../gameboard/BoardPiece';
-import { HexLocation_t } from '../gameboard/HexNode';
-import './BoardStyle.css';
+import { BoardPiece_t, GetRotatedNodeAtID } from '../utils/boardpieceutils';
+import { HexLocation_t } from '../utils/hexnodeutils';
+import styles from './GameBoardStyles.module.scss';
 import { selectHexNode } from '../reducers/BoardReducer';
 import { useSelector } from 'react-redux';
 
@@ -27,7 +27,7 @@ export const BoardPieceLayout = (props: {
     const selectedNode = useSelector( selectHexNode( selectedLocation ) );
 
     return (
-        <div className='grid-container-boardpiece'
+        <div className={styles.GridContainerBoardPiece }
             style={ {
                 gridRowStart: rowAndColumn[boardPiece.boardPieceID ].row,
                 gridColumnStart: rowAndColumn[boardPiece.boardPieceID].column,

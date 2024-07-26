@@ -1,0 +1,46 @@
+.AddPlayersPage {
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    row-gap: 16px;
+}
+
+.PlayerSummary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.PlayerHeader {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 8px;
+
+}
+
+.PlayerName {
+    font-size: 16px;
+}
+
+.NameInput {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.AddPlayerButton {
+
+}
+
+.StartGameButton {
+
+}
+

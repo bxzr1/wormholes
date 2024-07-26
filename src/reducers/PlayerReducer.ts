@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Player_t } from "../Player";
-import { RootState } from "../store";
-import { HexLocation_t } from "../gameboard/HexNode";
+import { Player_t } from "../utils/playerutils";
+import { RootState } from "./RootReducer";
+import { HexLocation_t } from "../utils/hexnodeutils";
 
 interface PlayerState {
     currentPlayer: number;
@@ -15,6 +15,12 @@ const playerSlice = createSlice({
         players: {}
     },
     reducers: {
+        clearPlayers: ( state: PlayerState, action: {} ) => {
+            state = { currentPlayer: -1, players: {} };
+        },
+        initSavedPlayers: ( state: PlayerState, action: { payload: PlayerState } ) => {
+            state = action.payload;
+        },
         addPlayer: (state: PlayerState, action: { payload: Player_t }) => {
             state.players[action.payload.name] = action.payload;
         },
@@ -26,6 +32,6 @@ const playerSlice = createSlice({
 
 export const selectPlayers = (state: RootState): { [ playerName: string] : Player_t} => state.playerState.players;
 export const selectNumPlayers = (state: RootState) => Object.keys(state.playerState.players).length;
-export const { addPlayer, movePlayer } = playerSlice.actions;
+export const { clearPlayers, initSavedPlayers, addPlayer, movePlayer } = playerSlice.actions;
 
 export default playerSlice.reducer;

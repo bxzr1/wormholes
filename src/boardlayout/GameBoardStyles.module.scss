@@ -1,0 +1,17 @@
+$rowHeight: 1.3vh;
+$columnWidth: 1.73*$rowHeight;
+$gridGap: 0.3vh;
+
+.GridContainerBoardPiece {
+    display: grid;
+    grid-auto-rows: $rowHeight;
+    grid-auto-columns: $columnWidth;
+    grid-gap: $gridGap;
+}
+
+.GridContainerGameboard {
+    display: grid;
+    grid-auto-rows: $rowHeight;
+    grid-auto-columns: $columnWidth;
+    grid-gap: $gridGap;
+}

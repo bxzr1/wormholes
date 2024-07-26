@@ -1,5 +1,5 @@
-import {  BoardPiece_t, CreateBoardPiece, GetBoardPieceEdgeIndices, GetRotatedBoardPiece } from "./BoardPiece";
-import { HexLocation_t, HexNode_t } from "./HexNode";
+import {  BoardPiece_t, CreateBoardPiece, GetBoardPieceEdgeIndices, GetRotatedBoardPiece } from "./boardpieceutils";
+import { HexLocation_t, HexNode_t } from "./hexnodeutils";
 import { isUnreachable, NodeType, template } from "../template";
 
 interface BoardPieceConnection {
@@ -84,7 +84,6 @@ export function GenerateGameBoard( numberOfPieces: number )
     }
 
     return pieces;
-    // sessionStorage.setItem("gameBoard", this.toJson());
 }
 
 function randomizeArray()
