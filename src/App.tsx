@@ -1,42 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import { useSelector } from "react-redux";
-import { GameBoardLayout } from './GameBoardLayout';
-import { GameBoard } from './GameBoard';
+import { useDispatch, useSelector } from "react-redux";
+import { GameBoardLayout } from './layout/GameBoardLayout';
 import { PreGameLogic } from './PreGameLogic';
 import { InGameLogic } from './InGameLogic';
-import { Player } from './Player';
-import { selectPlayers, selectNumPlayers } from "./PlayerReducer";
+import {  selectNumPlayers } from "./reducers/PlayerReducer";
+import { initGame, selectGameBoard } from './reducers/BoardReducer';
 
-function App() {
-
-    const [gameBoard, setGameBoard] = useState<GameBoard>();
-    const numPlayers = useSelector(selectNumPlayers);
+function App() 
+{
+    const dispatch = useDispatch();
+    const numPlayers = useSelector( selectNumPlayers );
+    const gameBoard = useSelector( selectGameBoard )
 
     useEffect(() => {
-        const storedGameBoard = sessionStorage.getItem("gameBoard");
-        const board = new GameBoard();
-        if (!storedGameBoard) {
-            board.generateGameBoard(8);
-            setGameBoard( board );
-        } else {
-            const gameBoardData = JSON.parse(storedGameBoard);
-            board.loadGameBoard(gameBoardData);
-            setGameBoard( board );
-        }
-    }, []);
+        dispatch( initGame( 8 ) )
+    }, [ dispatch ]);
 
-    if ( !gameBoard || gameBoard.boardPieces.length <= 0 )
+    if ( !gameBoard || Object.keys( gameBoard ).length <= 0 )
         return null;
     
     return (
         <div className="App" style={ { width: '100vw', height: '100vh', display: 'flex', flexWrap: 'wrap', fontSize: '36px' } }>
-            { numPlayers
-                ? <><GameBoardLayout gameBoardPieces={gameBoard.boardPieces}/>
-                  <InGameLogic/></>
-                : <PreGameLogic/> }
+            { numPlayers ? 
+                <>
+                    <GameBoardLayout gameBoardPieces={ gameBoard }/>
+                    <InGameLogic/>
+                </> : 
+                <PreGameLogic/> 
+            }
         </div>
     );
 }
+
 
 export default App;

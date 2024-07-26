@@ -9,8 +9,9 @@
     flex-direction: column;
     align-content: center;
     justify-content: center;
-    cursor: pointer;
     position: relative;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .hex-background {
@@ -41,17 +42,14 @@
 
 .hex.star {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.station {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.asteroid {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.planet::after {
@@ -60,7 +58,6 @@
 
 .hex.planet {
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .hex.nebula::after {
@@ -80,7 +77,6 @@
     grid-auto-rows: 57.75px;
     grid-auto-columns: 100px;
     grid-gap: 6px;
-    /* row-gap: 2px; */
 }
 
 .grid-container-gameboard {
@@ -88,5 +84,4 @@
     grid-auto-rows: 57.75px;
     grid-auto-columns: 100px;
     grid-gap: 6px;
-    /* row-gap: 2px; */
 }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Player } from './Player';
 import { useDispatch } from 'react-redux';
-import { addPlayer } from './PlayerReducer';
+import { addPlayer } from "./reducers/PlayerReducer";
 
 export function PreGameLogic() {
 
@@ -22,7 +21,7 @@ export function PreGameLogic() {
 
     const handleStartGame = () => {
         for (let i=0; i<numPlayers; i++) {
-            dispatch(addPlayer(new Player(`Player ${i+1}`)))
+            dispatch(addPlayer({ name: `Player ${i+1}`, score: 0, hexLocation: null }))
         }
     };
 

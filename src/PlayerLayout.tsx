@@ -1,12 +1,12 @@
-import { Player } from './Player';
+import { Player_t } from './Player';
 
-export function PlayerLayout ( props: { player: Player }) {
+export function PlayerLayout ( props: { player: Player_t }) {
     
 
     return (
         <div>
-            <h2>{props.player.getName()}</h2>
-            <p>Score: {props.player.getScore()}</p>
+            <h2>{props.player.name}</h2>
+            <p>Score: {props.player.score}</p>
         </div>
     );
 };
