@@ -4,11 +4,17 @@ import { NodeType, PlanetTypes } from "../template";
 export interface HexNode_t {
     nodeID: number,
     nodeType: NodeType,
-    neighborLocations: HexLocation_t[],
+    neighbors: HexNodeNeighbor_t[],
     isPlanet: boolean, 
     planetName?: PlanetTypes,
     hexNodeCenterX?: number,
     hexNodeCenterY?: number,
+}
+
+export interface HexNodeNeighbor_t 
+{
+    location: HexLocation_t,
+    orientation?: number,
 }
 
 export interface HexLocation_t {

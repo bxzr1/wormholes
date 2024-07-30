@@ -38,7 +38,7 @@ export const BoardPieceLayout = (props: {
                 {
                     const node = GetRotatedNodeAtID( parseInt( gridID ), boardPiece );
                     const isClicked = selectedLocation && node.nodeID === selectedLocation.hexNodeID && boardPiece.boardPieceID === selectedLocation.boardPieceID;
-                    const isNeighborOfSelected = selectedNode ? selectedNode.neighborLocations.findIndex(( neighbor ) => neighbor.boardPieceID === boardPiece.boardPieceID && neighbor.hexNodeID === node.nodeID ) > -1 : false;
+                    const isNeighborOfSelected = selectedNode ? selectedNode.neighbors.findIndex(( neighbor ) => neighbor.location.boardPieceID === boardPiece.boardPieceID && neighbor.location.hexNodeID === node.nodeID ) > -1 : false;
                     return <HexPiece
                         boardPieceID={ boardPiece.boardPieceID }
                         node={ node }

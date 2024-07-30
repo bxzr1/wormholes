@@ -1,26 +1,147 @@
-import { HexLocation_t, HexNode_t } from "./hexnodeutils";
+import { HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
 import { NodeDescription, NodeType, isUnreachable } from "../template";
-
-const neighborsMap: { [index: number]: number[] } = {
-    0: [1,3,4],
-    1: [0,2,4,5],
-    2: [1,5,6],
-    3: [0,4,7,8],
-    4: [0,1,3,5,8,9],
-    5: [1,2,4,6,9,10],
-    6: [2,5,10,11],
-    7: [3,8,12],
-    8: [3,4,7,9,12,13],
-    9: [4,5,8,10,13,14],
-    10: [5,6,9,11,14,15],
-    11: [6,10,15],
-    12: [7,8,13,16],
-    13: [8,9,12,14,16,17],
-    14: [9,10,13,15,17,18],
-    15: [10,11,14,18],
-    16: [12,13,17],
-    17: [13,14,16,18],
-    18: [14,15,17]
+// see image-references -> board_scheme for details
+const neighborsMap: { [index: number]: { orientation: number, neighborIndex: number }[] } = {
+    0: 
+    [
+        { orientation: 1, neighborIndex: 1 },
+        { orientation: 2, neighborIndex: 4 },
+        { orientation: 3, neighborIndex: 3 },
+    ],
+    1: 
+    [
+        { orientation: 1, neighborIndex: 2 },
+        { orientation: 2, neighborIndex: 5 },
+        { orientation: 3, neighborIndex: 4 }, 
+        { orientation: 4, neighborIndex: 0 },
+    ],
+    2: 
+    [
+        { orientation: 2, neighborIndex: 6},
+        { orientation: 3, neighborIndex: 5 },
+        { orientation: 4, neighborIndex: 1 },
+    ],
+    3: 
+    [
+        { orientation: 0, neighborIndex: 0 },
+        { orientation: 1, neighborIndex: 4 },
+        { orientation: 2, neighborIndex: 8 },
+        { orientation: 3, neighborIndex: 7 }, 
+    ],
+    4: 
+    [
+        { orientation: 0, neighborIndex: 1 },
+        { orientation: 4, neighborIndex: 3 }, 
+        { orientation: 1, neighborIndex: 5 },
+        { orientation: 3, neighborIndex: 8 },
+        { orientation: 2, neighborIndex: 9 },
+        { orientation: 5, neighborIndex: 0 },
+    ],
+    5: 
+    [
+        { orientation: 0, neighborIndex: 2 },
+        { orientation: 4, neighborIndex: 4 }, 
+        { orientation: 1, neighborIndex: 6 },
+        { orientation: 3, neighborIndex: 9 },
+        { orientation: 2, neighborIndex: 10 },
+        { orientation: 5, neighborIndex: 1 },
+    ],
+    6: 
+    [   
+        { orientation: 2, neighborIndex: 11 },
+        { orientation: 3, neighborIndex: 10 },
+        { orientation: 4, neighborIndex: 5 }, 
+        { orientation: 5, neighborIndex: 2 },
+    ],
+    7: 
+    [
+        { orientation: 0, neighborIndex: 3 },
+        { orientation: 1, neighborIndex: 8 },
+        { orientation: 2, neighborIndex: 12 }, 
+    ],
+    8: 
+    [
+        { orientation: 0, neighborIndex: 4 },
+        { orientation: 1, neighborIndex: 9 }, 
+        { orientation: 2, neighborIndex: 13 },
+        { orientation: 3, neighborIndex: 12 },
+        { orientation: 4, neighborIndex: 7 },
+        { orientation: 5, neighborIndex: 3 },
+    ],
+    9: 
+    [
+        { orientation: 0, neighborIndex: 5 },
+        { orientation: 1, neighborIndex: 10 }, 
+        { orientation: 2, neighborIndex: 14 },
+        { orientation: 3, neighborIndex: 13 },
+        { orientation: 4, neighborIndex: 8 },
+        { orientation: 5, neighborIndex: 4 },
+    ],
+    10: 
+    [
+        { orientation: 0, neighborIndex: 6 },
+        { orientation: 1, neighborIndex: 11 }, 
+        { orientation: 2, neighborIndex: 15 },
+        { orientation: 3, neighborIndex: 14 },
+        { orientation: 4, neighborIndex: 9 },
+        { orientation: 5, neighborIndex: 5 },
+    ],
+    11: 
+    [
+        { orientation: 3, neighborIndex: 15 },
+        { orientation: 4, neighborIndex: 10 },
+        { orientation: 5, neighborIndex: 6 },
+    ],
+    12: 
+    [
+        { orientation: 0, neighborIndex: 8 },
+        { orientation: 1, neighborIndex: 13 }, 
+        { orientation: 2, neighborIndex: 16 },
+    ],
+    13: 
+    [
+        { orientation: 0, neighborIndex: 9 },
+        { orientation: 1, neighborIndex: 14 }, 
+        { orientation: 2, neighborIndex: 17 },
+        { orientation: 3, neighborIndex: 16 },
+        { orientation: 4, neighborIndex: 12 },
+        { orientation: 5, neighborIndex: 8 },
+    ],
+    14: 
+    [
+        { orientation: 0, neighborIndex: 10 },
+        { orientation: 1, neighborIndex: 15 }, 
+        { orientation: 2, neighborIndex: 18 },
+        { orientation: 3, neighborIndex: 17 },
+        { orientation: 4, neighborIndex: 13 },
+        { orientation: 5, neighborIndex: 9 },
+    ],
+    15: 
+    [
+        { orientation: 0, neighborIndex: 11 },
+        { orientation: 3, neighborIndex: 18 },
+        { orientation: 4, neighborIndex: 14 },
+        { orientation: 5, neighborIndex: 10 },
+    ],
+    16: 
+    [
+        { orientation: 0, neighborIndex: 13 },
+        { orientation: 1, neighborIndex: 17 }, 
+        { orientation: 5, neighborIndex: 12 },
+    ],
+    17: 
+    [
+        { orientation: 0, neighborIndex: 14 },
+        { orientation: 1, neighborIndex: 18 }, 
+        { orientation: 4, neighborIndex: 16 },
+        { orientation: 5, neighborIndex: 13 },
+    ],
+    18: 
+    [
+        { orientation: 0, neighborIndex: 15 },
+        { orientation: 4, neighborIndex: 17 },
+        { orientation: 5, neighborIndex: 14 },
+    ],
 };
 
 const edgesMap: { [index: number]: number[] } = {
@@ -97,7 +218,7 @@ export function CreateBoardPiece( boardPieceID: number, templateIndex: number, t
             nodeType: templateNode.type,
             isPlanet: templateNode.name ? true : false , 
             planetName: templateNode.name,
-            neighborLocations: []
+            neighbors: []
         }
     });
     const nodesWithNeighbors = SetNodeNeighbors( nodes, boardPieceID );
@@ -117,15 +238,15 @@ function SetNodeNeighbors( nodes: HexNode_t[], boardPieceID: number )
     const orbitNodes = nodes.filter( ( nodes ) => nodes.nodeType === NodeType.orbit );
     nodes.forEach((node, index) =>
     {
-        const neighborIndicies = neighborsMap[index];
-        const neighborLocations: HexLocation_t[] = [];
+        const neighborData = neighborsMap[index];
+        const nodeNeighbors: HexNodeNeighbor_t[] = [];
 
-        neighborIndicies.forEach((neighborIndex) => 
+        neighborData.forEach( ( neighborData ) => 
         {
-            const neighborNode = nodes[neighborIndex];
+            const neighborNode = nodes[neighborData.neighborIndex];
             if( !isUnreachable( neighborNode.nodeType ))
             {
-                neighborLocations.push({ boardPieceID, hexNodeID: neighborNode.nodeID } )
+                nodeNeighbors.push({ location: { boardPieceID, hexNodeID: neighborNode.nodeID }, orientation: neighborData.orientation } )
             }
         });
 
@@ -133,18 +254,18 @@ function SetNodeNeighbors( nodes: HexNode_t[], boardPieceID: number )
         {
             orbitNodes.forEach( ( orbitNode ) => 
             {
-                if( neighborLocations.findIndex( ( location ) => location.hexNodeID === orbitNode.nodeID ) > -1 )
+                if( nodeNeighbors.findIndex( ( neighbor ) => neighbor.location.hexNodeID === orbitNode.nodeID ) > -1 )
                     return;
                 else if ( orbitNode.nodeID === node.nodeID ) 
                     return;
                 else 
-                neighborLocations.push( { boardPieceID, hexNodeID: orbitNode.nodeID } );
+                nodeNeighbors.push( { location: { boardPieceID, hexNodeID: orbitNode.nodeID }, orientation: undefined } );
             })
         }
 
         newNodes[ node.nodeID ] = {
             ...node,
-            neighborLocations
+            neighbors: nodeNeighbors
         }
     });
 
@@ -159,10 +280,10 @@ export function GetRotatedBoardPiece( boardPiece: BoardPiece_t )
     }
 }
 
-export function GetBoardPieceEdgeIndices( boardPiece: BoardPiece_t, requestedEdgeIndex: number ): number[]
+export function GetBoardPieceEdgeInfo( boardPiece: BoardPiece_t, requestedEdgeIndex: number ): { nodeIndices: number[], edgeIndex: number}
 {
     const actualEdgeIndex = (requestedEdgeIndex + boardPiece.rotation) % 6;
-    return edgesMap[actualEdgeIndex];
+    return { nodeIndices: edgesMap[actualEdgeIndex], edgeIndex: actualEdgeIndex };
 }
 
 export function GetRotatedNodeAtID( sourceNodeID: number, boardPiece: BoardPiece_t )
