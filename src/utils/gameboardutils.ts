@@ -171,7 +171,8 @@ function linkBoardPieces( pieces: BoardPieceMap_t, boardPiece: BoardPiece_t, boa
     const boardPieceConnections = boardPieceNeighborsMap[boardPieceIndex];
     let linkedPieces = {...pieces, [ boardPieceIndex ]: boardPiece };
     for (const boardPieceConnection of boardPieceConnections) {
-        const neighborPiece = linkedPieces[boardPieceConnection.neighborPieceIndex];
+        const neighborIndex = boardPieceConnection.neighborPieceIndex;
+        const neighborPiece = linkedPieces[neighborIndex];
         if (!neighborPiece) 
         {
             continue;
@@ -179,13 +180,13 @@ function linkBoardPieces( pieces: BoardPieceMap_t, boardPiece: BoardPiece_t, boa
         const neighborEdgeIndices = GetBoardPieceEdgeIndices( neighborPiece, boardPieceConnection.neighborEdgeIndex)
         const thisEdgeIndices = GetBoardPieceEdgeIndices( boardPiece, boardPieceConnection.thisEdgeIndex)
         
-        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[0] }, { boardPieceID: boardPieceConnection.neighborPieceIndex, hexNodeID: neighborEdgeIndices[2] } );
-        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[0] }, { boardPieceID: boardPieceConnection.neighborPieceIndex, hexNodeID: neighborEdgeIndices[1] } );
+        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[0] }, { boardPieceID: neighborIndex, hexNodeID: neighborEdgeIndices[2] } );
+        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[0] }, { boardPieceID: neighborIndex, hexNodeID: neighborEdgeIndices[1] } );
 
-        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[1] }, { boardPieceID: boardPieceConnection.neighborPieceIndex, hexNodeID: neighborEdgeIndices[1] } );
-        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[1] }, { boardPieceID: boardPieceConnection.neighborPieceIndex, hexNodeID: neighborEdgeIndices[0] } );
+        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[1] }, { boardPieceID: neighborIndex, hexNodeID: neighborEdgeIndices[1] } );
+        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[1] }, { boardPieceID: neighborIndex, hexNodeID: neighborEdgeIndices[0] } );
 
-        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[2] }, { boardPieceID: boardPieceConnection.neighborPieceIndex, hexNodeID: neighborEdgeIndices[0] } );
+        linkedPieces = linkHexNodes( linkedPieces, { boardPieceID: boardPieceIndex, hexNodeID: thisEdgeIndices[2] }, { boardPieceID: neighborIndex, hexNodeID: neighborEdgeIndices[0] } );
     }
 
     return linkedPieces;

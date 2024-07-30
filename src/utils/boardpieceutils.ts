@@ -1,5 +1,5 @@
-import { HexNode_t } from "./hexnodeutils";
-import { NodeDescription, isUnreachable } from "../template";
+import { HexLocation_t, HexNode_t } from "./hexnodeutils";
+import { NodeDescription, NodeType, isUnreachable } from "../template";
 
 const neighborsMap: { [index: number]: number[] } = {
     0: [1,3,4],
@@ -114,20 +114,37 @@ export function CreateBoardPiece( boardPieceID: number, templateIndex: number, t
 function SetNodeNeighbors( nodes: HexNode_t[], boardPieceID: number )
 {
     let newNodes: NodeMap_t = {};
+    const orbitNodes = nodes.filter( ( nodes ) => nodes.nodeType === NodeType.orbit );
     nodes.forEach((node, index) =>
     {
         const neighborIndicies = neighborsMap[index];
-        const mappedIndicies = neighborIndicies.map((neighborIndex) => {
-            return nodes[neighborIndex]
+        const neighborLocations: HexLocation_t[] = [];
+
+        neighborIndicies.forEach((neighborIndex) => 
+        {
+            const neighborNode = nodes[neighborIndex];
+            if( !isUnreachable( neighborNode.nodeType ))
+            {
+                neighborLocations.push({ boardPieceID, hexNodeID: neighborNode.nodeID } )
+            }
         });
 
-        const reachableNeighbors = mappedIndicies.filter((hexNode) => {
-            return !isUnreachable(hexNode.nodeType );
-        });
+        if( node.nodeType === NodeType.orbit )
+        {
+            orbitNodes.forEach( ( orbitNode ) => 
+            {
+                if( neighborLocations.findIndex( ( location ) => location.hexNodeID === orbitNode.nodeID ) > -1 )
+                    return;
+                else if ( orbitNode.nodeID === node.nodeID ) 
+                    return;
+                else 
+                neighborLocations.push( { boardPieceID, hexNodeID: orbitNode.nodeID } );
+            })
+        }
 
         newNodes[ node.nodeID ] = {
             ...node,
-            neighborLocations: reachableNeighbors.map( ( neighbor ) => { return { boardPieceID, hexNodeID: neighbor.nodeID } })
+            neighborLocations
         }
     });
 
