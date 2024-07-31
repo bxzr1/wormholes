@@ -1,150 +1,157 @@
-import { HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
-import { NodeDescription, NodeType, isUnreachable } from "../template";
-// see image-references -> board_scheme for details
-const neighborsMap: { [index: number]: { orientation: number, neighborIndex: number }[] } = {
+import { ConnectionDirection_t, debugMode, HexNode_t, HexNodeIndex_t, HexNodeNeighbor_t } from "./hexnodeutils";
+import { NodeDescription, NodeType } from "../template";
+
+export type EdgeIndex_t = number; 
+export type EdgeNodeIndex_t = number;
+export type BoardPieceIndex_t = number; 
+
+// see hexnode_diagram under image-references/indexandnamingdiagram for more details
+const neighborsMap: { [sourceHexNodeIndex: HexNodeIndex_t]: { connectionDirection: ConnectionDirection_t, neighborHexNodeIndex: HexNodeIndex_t }[] } = {
     0: 
     [
-        { orientation: 1, neighborIndex: 1 },
-        { orientation: 2, neighborIndex: 4 },
-        { orientation: 3, neighborIndex: 3 },
+        { connectionDirection: 1, neighborHexNodeIndex: 1 },
+        { connectionDirection: 2, neighborHexNodeIndex: 4 },
+        { connectionDirection: 3, neighborHexNodeIndex: 3 },
     ],
     1: 
     [
-        { orientation: 1, neighborIndex: 2 },
-        { orientation: 2, neighborIndex: 5 },
-        { orientation: 3, neighborIndex: 4 }, 
-        { orientation: 4, neighborIndex: 0 },
+        { connectionDirection: 1, neighborHexNodeIndex: 2 },
+        { connectionDirection: 2, neighborHexNodeIndex: 5 },
+        { connectionDirection: 3, neighborHexNodeIndex: 4 }, 
+        { connectionDirection: 4, neighborHexNodeIndex: 0 },
     ],
     2: 
     [
-        { orientation: 2, neighborIndex: 6},
-        { orientation: 3, neighborIndex: 5 },
-        { orientation: 4, neighborIndex: 1 },
+        { connectionDirection: 2, neighborHexNodeIndex: 6},
+        { connectionDirection: 3, neighborHexNodeIndex: 5 },
+        { connectionDirection: 4, neighborHexNodeIndex: 1 },
     ],
     3: 
     [
-        { orientation: 0, neighborIndex: 0 },
-        { orientation: 1, neighborIndex: 4 },
-        { orientation: 2, neighborIndex: 8 },
-        { orientation: 3, neighborIndex: 7 }, 
+        { connectionDirection: 0, neighborHexNodeIndex: 0 },
+        { connectionDirection: 1, neighborHexNodeIndex: 4 },
+        { connectionDirection: 2, neighborHexNodeIndex: 8 },
+        { connectionDirection: 3, neighborHexNodeIndex: 7 }, 
     ],
     4: 
     [
-        { orientation: 0, neighborIndex: 1 },
-        { orientation: 4, neighborIndex: 3 }, 
-        { orientation: 1, neighborIndex: 5 },
-        { orientation: 3, neighborIndex: 8 },
-        { orientation: 2, neighborIndex: 9 },
-        { orientation: 5, neighborIndex: 0 },
+        { connectionDirection: 0, neighborHexNodeIndex: 1 },
+        { connectionDirection: 4, neighborHexNodeIndex: 3 }, 
+        { connectionDirection: 1, neighborHexNodeIndex: 5 },
+        { connectionDirection: 3, neighborHexNodeIndex: 8 },
+        { connectionDirection: 2, neighborHexNodeIndex: 9 },
+        { connectionDirection: 5, neighborHexNodeIndex: 0 },
     ],
     5: 
     [
-        { orientation: 0, neighborIndex: 2 },
-        { orientation: 4, neighborIndex: 4 }, 
-        { orientation: 1, neighborIndex: 6 },
-        { orientation: 3, neighborIndex: 9 },
-        { orientation: 2, neighborIndex: 10 },
-        { orientation: 5, neighborIndex: 1 },
+        { connectionDirection: 0, neighborHexNodeIndex: 2 },
+        { connectionDirection: 4, neighborHexNodeIndex: 4 }, 
+        { connectionDirection: 1, neighborHexNodeIndex: 6 },
+        { connectionDirection: 3, neighborHexNodeIndex: 9 },
+        { connectionDirection: 2, neighborHexNodeIndex: 10 },
+        { connectionDirection: 5, neighborHexNodeIndex: 1 },
     ],
     6: 
     [   
-        { orientation: 2, neighborIndex: 11 },
-        { orientation: 3, neighborIndex: 10 },
-        { orientation: 4, neighborIndex: 5 }, 
-        { orientation: 5, neighborIndex: 2 },
+        { connectionDirection: 2, neighborHexNodeIndex: 11 },
+        { connectionDirection: 3, neighborHexNodeIndex: 10 },
+        { connectionDirection: 4, neighborHexNodeIndex: 5 }, 
+        { connectionDirection: 5, neighborHexNodeIndex: 2 },
     ],
     7: 
     [
-        { orientation: 0, neighborIndex: 3 },
-        { orientation: 1, neighborIndex: 8 },
-        { orientation: 2, neighborIndex: 12 }, 
+        { connectionDirection: 0, neighborHexNodeIndex: 3 },
+        { connectionDirection: 1, neighborHexNodeIndex: 8 },
+        { connectionDirection: 2, neighborHexNodeIndex: 12 }, 
     ],
     8: 
     [
-        { orientation: 0, neighborIndex: 4 },
-        { orientation: 1, neighborIndex: 9 }, 
-        { orientation: 2, neighborIndex: 13 },
-        { orientation: 3, neighborIndex: 12 },
-        { orientation: 4, neighborIndex: 7 },
-        { orientation: 5, neighborIndex: 3 },
+        { connectionDirection: 0, neighborHexNodeIndex: 4 },
+        { connectionDirection: 1, neighborHexNodeIndex: 9 }, 
+        { connectionDirection: 2, neighborHexNodeIndex: 13 },
+        { connectionDirection: 3, neighborHexNodeIndex: 12 },
+        { connectionDirection: 4, neighborHexNodeIndex: 7 },
+        { connectionDirection: 5, neighborHexNodeIndex: 3 },
     ],
     9: 
     [
-        { orientation: 0, neighborIndex: 5 },
-        { orientation: 1, neighborIndex: 10 }, 
-        { orientation: 2, neighborIndex: 14 },
-        { orientation: 3, neighborIndex: 13 },
-        { orientation: 4, neighborIndex: 8 },
-        { orientation: 5, neighborIndex: 4 },
+        { connectionDirection: 0, neighborHexNodeIndex: 5 },
+        { connectionDirection: 1, neighborHexNodeIndex: 10 }, 
+        { connectionDirection: 2, neighborHexNodeIndex: 14 },
+        { connectionDirection: 3, neighborHexNodeIndex: 13 },
+        { connectionDirection: 4, neighborHexNodeIndex: 8 },
+        { connectionDirection: 5, neighborHexNodeIndex: 4 },
     ],
     10: 
     [
-        { orientation: 0, neighborIndex: 6 },
-        { orientation: 1, neighborIndex: 11 }, 
-        { orientation: 2, neighborIndex: 15 },
-        { orientation: 3, neighborIndex: 14 },
-        { orientation: 4, neighborIndex: 9 },
-        { orientation: 5, neighborIndex: 5 },
+        { connectionDirection: 0, neighborHexNodeIndex: 6 },
+        { connectionDirection: 1, neighborHexNodeIndex: 11 }, 
+        { connectionDirection: 2, neighborHexNodeIndex: 15 },
+        { connectionDirection: 3, neighborHexNodeIndex: 14 },
+        { connectionDirection: 4, neighborHexNodeIndex: 9 },
+        { connectionDirection: 5, neighborHexNodeIndex: 5 },
     ],
     11: 
     [
-        { orientation: 3, neighborIndex: 15 },
-        { orientation: 4, neighborIndex: 10 },
-        { orientation: 5, neighborIndex: 6 },
+        { connectionDirection: 3, neighborHexNodeIndex: 15 },
+        { connectionDirection: 4, neighborHexNodeIndex: 10 },
+        { connectionDirection: 5, neighborHexNodeIndex: 6 },
     ],
     12: 
     [
-        { orientation: 0, neighborIndex: 8 },
-        { orientation: 1, neighborIndex: 13 }, 
-        { orientation: 2, neighborIndex: 16 },
+        { connectionDirection: 0, neighborHexNodeIndex: 8 },
+        { connectionDirection: 1, neighborHexNodeIndex: 13 }, 
+        { connectionDirection: 2, neighborHexNodeIndex: 16 },
+        { connectionDirection: 5, neighborHexNodeIndex: 7 },
     ],
     13: 
     [
-        { orientation: 0, neighborIndex: 9 },
-        { orientation: 1, neighborIndex: 14 }, 
-        { orientation: 2, neighborIndex: 17 },
-        { orientation: 3, neighborIndex: 16 },
-        { orientation: 4, neighborIndex: 12 },
-        { orientation: 5, neighborIndex: 8 },
+        { connectionDirection: 0, neighborHexNodeIndex: 9 },
+        { connectionDirection: 1, neighborHexNodeIndex: 14 }, 
+        { connectionDirection: 2, neighborHexNodeIndex: 17 },
+        { connectionDirection: 3, neighborHexNodeIndex: 16 },
+        { connectionDirection: 4, neighborHexNodeIndex: 12 },
+        { connectionDirection: 5, neighborHexNodeIndex: 8 },
     ],
     14: 
     [
-        { orientation: 0, neighborIndex: 10 },
-        { orientation: 1, neighborIndex: 15 }, 
-        { orientation: 2, neighborIndex: 18 },
-        { orientation: 3, neighborIndex: 17 },
-        { orientation: 4, neighborIndex: 13 },
-        { orientation: 5, neighborIndex: 9 },
+        { connectionDirection: 0, neighborHexNodeIndex: 10 },
+        { connectionDirection: 1, neighborHexNodeIndex: 15 }, 
+        { connectionDirection: 2, neighborHexNodeIndex: 18 },
+        { connectionDirection: 3, neighborHexNodeIndex: 17 },
+        { connectionDirection: 4, neighborHexNodeIndex: 13 },
+        { connectionDirection: 5, neighborHexNodeIndex: 9 },
     ],
     15: 
     [
-        { orientation: 0, neighborIndex: 11 },
-        { orientation: 3, neighborIndex: 18 },
-        { orientation: 4, neighborIndex: 14 },
-        { orientation: 5, neighborIndex: 10 },
+        { connectionDirection: 0, neighborHexNodeIndex: 11 },
+        { connectionDirection: 3, neighborHexNodeIndex: 18 },
+        { connectionDirection: 4, neighborHexNodeIndex: 14 },
+        { connectionDirection: 5, neighborHexNodeIndex: 10 },
     ],
     16: 
     [
-        { orientation: 0, neighborIndex: 13 },
-        { orientation: 1, neighborIndex: 17 }, 
-        { orientation: 5, neighborIndex: 12 },
+        { connectionDirection: 0, neighborHexNodeIndex: 13 },
+        { connectionDirection: 1, neighborHexNodeIndex: 17 }, 
+        { connectionDirection: 5, neighborHexNodeIndex: 12 },
     ],
     17: 
     [
-        { orientation: 0, neighborIndex: 14 },
-        { orientation: 1, neighborIndex: 18 }, 
-        { orientation: 4, neighborIndex: 16 },
-        { orientation: 5, neighborIndex: 13 },
+        { connectionDirection: 0, neighborHexNodeIndex: 14 },
+        { connectionDirection: 1, neighborHexNodeIndex: 18 }, 
+        { connectionDirection: 4, neighborHexNodeIndex: 16 },
+        { connectionDirection: 5, neighborHexNodeIndex: 13 },
     ],
     18: 
     [
-        { orientation: 0, neighborIndex: 15 },
-        { orientation: 4, neighborIndex: 17 },
-        { orientation: 5, neighborIndex: 14 },
+        { connectionDirection: 0, neighborHexNodeIndex: 15 },
+        { connectionDirection: 4, neighborHexNodeIndex: 17 },
+        { connectionDirection: 5, neighborHexNodeIndex: 14 },
     ],
 };
 
-const edgesMap: { [index: number]: number[] } = {
+// CW order
+const edgesMap: { [edgeIndex: EdgeIndex_t]: HexNodeIndex_t[] } = {
     0: [0, 1, 2],
     1: [2, 6, 11],
     2: [11, 15, 18],
@@ -153,7 +160,17 @@ const edgesMap: { [index: number]: number[] } = {
     5: [7, 3, 0],
 }
 
-export const rotationLookup: { [index: number]: number[] } = {
+// CCW order
+// const edgesMap: { [edgeIndex: EdgeIndex_t]: HexNodeIndex_t[] } = {
+//     0: [0, 1, 2],
+//     5: [7, 3, 0],
+//     4: [16, 12, 7],
+//     3: [18, 17, 16],
+//     2: [11, 15, 18],
+//     1: [2, 6, 11],
+// }
+
+export const rotationLookup: { [hexNodeIndex: HexNodeIndex_t]: HexNodeIndex_t[] } = {
     
     // Clockwise table
     0:[0, 2, 11, 18, 16, 7],
@@ -176,63 +193,63 @@ export const rotationLookup: { [index: number]: number[] } = {
     17:[17, 12, 3, 1, 6, 15],
     18:[18, 16, 7, 0, 2, 11]
     
-    /*
+    
     // Counter-clockwise table
-    0:[7, 16, 18, 11, 2, 0],
-    1:[3, 12, 17, 15, 6, 1],
-    2:[0, 7, 16, 18, 11, 2],
-    3:[12, 17, 15, 6, 1, 3],
-    4:[8, 13, 14, 10, 5, 4],
-    5:[4, 8, 13, 14, 10, 5],
-    6:[1, 3, 12, 17, 15, 6],
-    7:[16, 18, 11, 2, 0, 7],
-    8:[13, 14, 10, 5, 4, 8],
-    9:[9, 9, 9, 9, 9, 9, 9],
-    10:[5,4,8,13,14,10],
-    11:[2,0,7,16,18,11],
-    12:[17,15,6,1,3,12],
-    13:[14,10,5,4,8,13],
-    14:[10,5,4,8,13,14],
-    15:[6,1,3,12,17,15],
-    16:[18,11,2,0,7,16],
-    17:[15,6,1,3,12,17],
-    18:[11,2,0,7,16,18]
-    */
+    // 0:[0, 7, 16, 18, 11, 2],
+    // 1:[1, 3, 12, 17, 15, 6],
+    // 2:[2, 0, 7, 16, 18, 11],
+    // 3:[3, 12, 17, 15, 6, 1],
+    // 4:[4, 8, 13, 14, 10, 5],
+    // 5:[5, 4, 8, 13, 14, 10],
+    // 6:[6, 1, 3, 12, 17, 15],
+    // 7:[7, 16, 18, 11, 2, 0],
+    // 8:[8, 13, 14, 10, 5, 4],
+    // 9:[9, 9, 9, 9, 9, 9],
+    // 10:[10, 5, 4, 8, 13, 14],
+    // 11:[11, 2, 0, 7, 16, 18],
+    // 12:[12, 17, 15, 6, 1, 3],
+    // 13:[13, 14, 10, 5, 4, 8],
+    // 14:[14, 10, 5, 4, 8, 13],
+    // 15:[15, 6, 1, 3, 12, 17],
+    // 16:[16, 18, 11, 2, 0, 7],
+    // 17:[17, 15, 6, 1, 3, 12],
+    // 18:[18, 11, 2, 0, 7, 16]
+    
 }
 
-export interface NodeMap_t { [ hexNodeID: number ]: HexNode_t };
+export interface NodeMap_t { [ hexNodeIndex: HexNodeIndex_t ]: HexNode_t };
 
 export interface BoardPiece_t 
 {
-    boardPieceID: number,
-    nodes: { [ hexNodeID: number ] : HexNode_t },
+    boardPieceIndex: BoardPieceIndex_t,
+    nodes: { [ hexNodeIndex: HexNodeIndex_t ] : HexNode_t },
     rotation: number,
     templateIndex: number,
 }
 
-export function CreateBoardPiece( boardPieceID: number, templateIndex: number, templateNodes: NodeDescription[] )
+export function CreateBoardPiece( boardPieceIndex: BoardPieceIndex_t, templateIndex: number, templateNodes: NodeDescription[] )
 {
-    let nodes: HexNode_t[] = templateNodes.map( ( templateNode, nodeIndex ) => {
+    let nodes: HexNode_t[] = templateNodes.map( ( templateNode, hexNodeIndex ) => {
         return {
-            nodeID: nodeIndex,
+            hexNodeIndex,
             nodeType: templateNode.type,
             isPlanet: templateNode.name ? true : false , 
             planetName: templateNode.name,
             neighbors: []
         }
     });
-    const nodesWithNeighbors = SetNodeNeighbors( nodes, boardPieceID );
+    const nodesWithNeighbors = SetNodeNeighbors( nodes, boardPieceIndex );
 
     return {
-        boardPieceID, 
+        boardPieceIndex, 
         templateIndex,
-        rotation: Math.floor(Math.random() * 5),
+        rotation: debugMode ? boardPieceIndex % 6 : Math.floor(Math.random() * 5),
         nodes: nodesWithNeighbors
     }
 
 }
 
-function SetNodeNeighbors( nodes: HexNode_t[], boardPieceID: number )
+function SetNodeNeighbors( nodes: HexNode_t[], boardPieceIndex: BoardPieceIndex_t )
 {
     let newNodes: NodeMap_t = {};
     const orbitNodes = nodes.filter( ( nodes ) => nodes.nodeType === NodeType.orbit );
@@ -243,27 +260,24 @@ function SetNodeNeighbors( nodes: HexNode_t[], boardPieceID: number )
 
         neighborData.forEach( ( neighborData ) => 
         {
-            const neighborNode = nodes[neighborData.neighborIndex];
-            if( !isUnreachable( neighborNode.nodeType ))
-            {
-                nodeNeighbors.push({ location: { boardPieceID, hexNodeID: neighborNode.nodeID }, orientation: neighborData.orientation } )
-            }
+            const neighborNode = nodes[neighborData.neighborHexNodeIndex];
+            nodeNeighbors.push({ location: { boardPieceIndex: boardPieceIndex, hexNodeIndex: neighborNode.hexNodeIndex }, connectionDirection: neighborData.connectionDirection } )
         });
 
         if( node.nodeType === NodeType.orbit )
         {
             orbitNodes.forEach( ( orbitNode ) => 
             {
-                if( nodeNeighbors.findIndex( ( neighbor ) => neighbor.location.hexNodeID === orbitNode.nodeID ) > -1 )
+                if( nodeNeighbors.findIndex( ( neighbor ) => neighbor.location.hexNodeIndex === orbitNode.hexNodeIndex ) > -1 )
                     return;
-                else if ( orbitNode.nodeID === node.nodeID ) 
+                else if ( orbitNode.hexNodeIndex === node.hexNodeIndex ) 
                     return;
                 else 
-                nodeNeighbors.push( { location: { boardPieceID, hexNodeID: orbitNode.nodeID }, orientation: undefined } );
+                nodeNeighbors.push( { location: { boardPieceIndex: boardPieceIndex, hexNodeIndex: orbitNode.hexNodeIndex }, connectionDirection: undefined } );
             })
         }
 
-        newNodes[ node.nodeID ] = {
+        newNodes[ node.hexNodeIndex ] = {
             ...node,
             neighbors: nodeNeighbors
         }
@@ -280,16 +294,16 @@ export function GetRotatedBoardPiece( boardPiece: BoardPiece_t )
     }
 }
 
-export function GetBoardPieceEdgeInfo( boardPiece: BoardPiece_t, requestedEdgeIndex: number ): { nodeIndices: number[], edgeIndex: number}
+export function GetBoardPieceEdgeInfo( boardPiece: BoardPiece_t, requestedEdgeIndex: EdgeIndex_t ): { nodeIndices: HexNodeIndex_t[], edgeIndex: EdgeIndex_t }
 {
     const actualEdgeIndex = (requestedEdgeIndex + boardPiece.rotation) % 6;
     return { nodeIndices: edgesMap[actualEdgeIndex], edgeIndex: actualEdgeIndex };
 }
 
-export function GetRotatedNodeAtID( sourceNodeID: number, boardPiece: BoardPiece_t )
+export function GetRotatedNodeAtIndex( sourceHexNodeIndex: HexNodeIndex_t, boardPiece: BoardPiece_t )
 {
-    const lookupId = rotationLookup[sourceNodeID];
-    const nodeID = lookupId[boardPiece.rotation];
-    const rotatedNode = boardPiece.nodes[nodeID];
+    const lookupIndices = rotationLookup[sourceHexNodeIndex];
+    const hexNodeIndex = lookupIndices[boardPiece.rotation];
+    const rotatedNode = boardPiece.nodes[hexNodeIndex];
     return rotatedNode;
 }

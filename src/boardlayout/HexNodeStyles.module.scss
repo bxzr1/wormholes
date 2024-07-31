@@ -27,13 +27,24 @@ $borderWidth: 8px;
     &.star,
     &.station,
     &.asteroid {
-        border: none;
+        pointer-events: none;
+        // border: none;
         background-color: none;
+
+        &.DebugMode {
+            pointer-events: all;
+        }
     }
 
     &.planet {
-        border: none;
+        pointer-events: none;
+        // border: none;
         background-color: none;
+
+        &.DebugMode {
+            pointer-events: all;
+        }
+
         &::after {
             background-color: rgb(202, 151, 57);
         }
@@ -73,4 +84,41 @@ $borderWidth: 8px;
 .HexInfo {
     z-index: 1;
     font-size: 12px;
+}
+
+.Edge0 {
+    position: absolute; 
+    top: 8px;
+    right: 8px;
+}
+
+.Edge1{ 
+    position: absolute; 
+    top: 45%;
+    right: 0;
+
+}
+
+.Edge2{ 
+    position: absolute; 
+    bottom: 8px;
+    right: 10px;
+}
+
+.Edge3{ 
+    position: absolute; 
+    bottom: 8px;
+    left: 10px;
+}
+
+.Edge4{ 
+    position: absolute; 
+    top: 45%;
+    left: 0;
+}
+
+.Edge5{ 
+    position: absolute; 
+    top: 8px;
+    left: 8px;
 }
