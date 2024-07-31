@@ -1,7 +1,8 @@
-import {  BoardPiece_t, BoardPieceIndex_t, CreateBoardPiece, EdgeIndex_t, EdgeNodeIndex_t, GetBoardPieceEdgeInfo, GetRotatedBoardPiece } from "./boardpieceutils";
-import { ConnectionDirection_t, HexLocation_t, HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
+import { BoardPiece_t, CreateBoardPiece, GetBoardPieceEdgeInfo, GetRotatedBoardPiece } from "./boardpieceutils";
+import { HexLocation_t, HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
 import { NodeType, template } from "../template";
 import { debugLinearTemplatePieces } from "./debugutils";
+import { BoardPieceIndex_t, ConnectionDirection_t, ValidateConnectionDirection, EdgeIndex_t, EdgeNodeIndex_t, HexNodeIndex_t } from "./aliasutils";
 
 interface BoardPieceConnection {
     neighborPieceIndex: BoardPieceIndex_t;
@@ -13,65 +14,75 @@ export interface BoardPieceMap_t { [ boardPieceIndex: BoardPieceIndex_t ]: Board
 
 // see game_board_diagram under image-references/indexandnamingdiagram for more details
 const boardPieceNeighborsMap: { [ boardPieceIndex: BoardPieceIndex_t ]: BoardPieceConnection[] } = {
-    // Connection object for each of these
-    0: [
-        { neighborPieceIndex: 1, neighborEdgeIndex: 3, sourceEdgeIndex: 0 },
-        { neighborPieceIndex: 3, neighborEdgeIndex: 4, sourceEdgeIndex: 1 },
-        { neighborPieceIndex: 4, neighborEdgeIndex: 5, sourceEdgeIndex: 2 }
-    ], 
-    1: [
-        { neighborPieceIndex: 0, neighborEdgeIndex: 0, sourceEdgeIndex: 3 },
-        { neighborPieceIndex: 2, neighborEdgeIndex: 4, sourceEdgeIndex: 1 },
-        { neighborPieceIndex: 3, neighborEdgeIndex: 5, sourceEdgeIndex: 2 }
+    [ 0 as BoardPieceIndex_t ]: 
+    [
+        { neighborPieceIndex: 1 as BoardPieceIndex_t, neighborEdgeIndex: 3 as EdgeIndex_t, sourceEdgeIndex: 0 as EdgeIndex_t },
+        { neighborPieceIndex: 3 as BoardPieceIndex_t, neighborEdgeIndex: 4 as EdgeIndex_t, sourceEdgeIndex: 1 as EdgeIndex_t },
+        { neighborPieceIndex: 4 as BoardPieceIndex_t, neighborEdgeIndex: 5 as EdgeIndex_t, sourceEdgeIndex: 2 as EdgeIndex_t }
     ],
-    2: [
-        { neighborPieceIndex: 1, neighborEdgeIndex: 1, sourceEdgeIndex: 4 },
-        { neighborPieceIndex: 3, neighborEdgeIndex: 0, sourceEdgeIndex: 3 }
-    ],
-    3: [
-        { neighborPieceIndex: 0, neighborEdgeIndex: 1, sourceEdgeIndex: 4 },
-        { neighborPieceIndex: 1, neighborEdgeIndex: 2, sourceEdgeIndex: 5 },
-        { neighborPieceIndex: 2, neighborEdgeIndex: 3, sourceEdgeIndex: 0 },
-        { neighborPieceIndex: 4, neighborEdgeIndex: 0, sourceEdgeIndex: 3 },
-        { neighborPieceIndex: 7, neighborEdgeIndex: 5, sourceEdgeIndex: 2 }
-    ],
-    4: [
-        { neighborPieceIndex: 0, neighborEdgeIndex: 2, sourceEdgeIndex: 5 },
-        { neighborPieceIndex: 3, neighborEdgeIndex: 3, sourceEdgeIndex: 0 },
-        { neighborPieceIndex: 5, neighborEdgeIndex: 0, sourceEdgeIndex: 4 },
-        { neighborPieceIndex: 6, neighborEdgeIndex: 5, sourceEdgeIndex: 2 },
-        { neighborPieceIndex: 7, neighborEdgeIndex: 4, sourceEdgeIndex: 1 },
-    ],
-    5: [
-        { neighborPieceIndex: 4, neighborEdgeIndex: 3, sourceEdgeIndex: 0 },
-        { neighborPieceIndex: 6, neighborEdgeIndex: 4, sourceEdgeIndex: 1 }
-    ],
-    6: [
-        { neighborPieceIndex: 4, neighborEdgeIndex: 2, sourceEdgeIndex: 5 },
-        { neighborPieceIndex: 5, neighborEdgeIndex: 1, sourceEdgeIndex: 4 },
-        { neighborPieceIndex: 7, neighborEdgeIndex: 3, sourceEdgeIndex: 0 }
-    ],
-    7: [
-        { neighborPieceIndex: 3, neighborEdgeIndex: 2, sourceEdgeIndex: 5 },
-        { neighborPieceIndex: 4, neighborEdgeIndex: 1, sourceEdgeIndex: 4 },
-        { neighborPieceIndex: 6, neighborEdgeIndex: 0, sourceEdgeIndex: 3 }
+    [ 1 as BoardPieceIndex_t ]: 
+    [
+        { neighborPieceIndex: 0 as BoardPieceIndex_t, neighborEdgeIndex: 0 as EdgeIndex_t, sourceEdgeIndex: 3 as EdgeIndex_t },
+        { neighborPieceIndex: 2 as BoardPieceIndex_t, neighborEdgeIndex: 4 as EdgeIndex_t, sourceEdgeIndex: 1 as EdgeIndex_t },
+        { neighborPieceIndex: 3 as BoardPieceIndex_t, neighborEdgeIndex: 5 as EdgeIndex_t, sourceEdgeIndex: 2 as EdgeIndex_t }
+    ],    
+    [ 2 as BoardPieceIndex_t ] :
+    [       
+        { neighborPieceIndex: 1 as BoardPieceIndex_t, neighborEdgeIndex: 1 as EdgeIndex_t, sourceEdgeIndex: 4 as EdgeIndex_t },
+        { neighborPieceIndex: 3 as BoardPieceIndex_t, neighborEdgeIndex: 0 as EdgeIndex_t, sourceEdgeIndex: 3 as EdgeIndex_t }
+    ],    
+    [ 3 as BoardPieceIndex_t ] :
+    [       
+        { neighborPieceIndex: 0 as BoardPieceIndex_t, neighborEdgeIndex: 1 as EdgeIndex_t, sourceEdgeIndex: 4 as EdgeIndex_t },
+        { neighborPieceIndex: 1 as BoardPieceIndex_t, neighborEdgeIndex: 2 as EdgeIndex_t, sourceEdgeIndex: 5 as EdgeIndex_t },
+        { neighborPieceIndex: 2 as BoardPieceIndex_t, neighborEdgeIndex: 3 as EdgeIndex_t, sourceEdgeIndex: 0 as EdgeIndex_t },
+        { neighborPieceIndex: 4 as BoardPieceIndex_t, neighborEdgeIndex: 0 as EdgeIndex_t, sourceEdgeIndex: 3 as EdgeIndex_t },
+        { neighborPieceIndex: 7 as BoardPieceIndex_t, neighborEdgeIndex: 5 as EdgeIndex_t, sourceEdgeIndex: 2 as EdgeIndex_t }
+    ],        
+    [ 4 as BoardPieceIndex_t ]:
+    [        
+        { neighborPieceIndex: 0 as BoardPieceIndex_t, neighborEdgeIndex: 2 as EdgeIndex_t, sourceEdgeIndex: 5 as EdgeIndex_t },
+        { neighborPieceIndex: 3 as BoardPieceIndex_t, neighborEdgeIndex: 3 as EdgeIndex_t, sourceEdgeIndex: 0 as EdgeIndex_t },
+        { neighborPieceIndex: 5 as BoardPieceIndex_t, neighborEdgeIndex: 0 as EdgeIndex_t, sourceEdgeIndex: 4 as EdgeIndex_t },
+        { neighborPieceIndex: 6 as BoardPieceIndex_t, neighborEdgeIndex: 5 as EdgeIndex_t, sourceEdgeIndex: 2 as EdgeIndex_t },
+        { neighborPieceIndex: 7 as BoardPieceIndex_t, neighborEdgeIndex: 4 as EdgeIndex_t, sourceEdgeIndex: 1 as EdgeIndex_t },
+    ],    
+    [ 5 as BoardPieceIndex_t ]:
+    [
+        { neighborPieceIndex: 4 as BoardPieceIndex_t, neighborEdgeIndex: 3 as EdgeIndex_t, sourceEdgeIndex: 0 as EdgeIndex_t },
+        { neighborPieceIndex: 6 as BoardPieceIndex_t, neighborEdgeIndex: 4 as EdgeIndex_t, sourceEdgeIndex: 1 as EdgeIndex_t }
+    ],    
+    [ 6 as BoardPieceIndex_t ]: 
+    [       
+        { neighborPieceIndex: 4 as BoardPieceIndex_t, neighborEdgeIndex: 2 as EdgeIndex_t, sourceEdgeIndex: 5 as EdgeIndex_t },
+        { neighborPieceIndex: 5 as BoardPieceIndex_t, neighborEdgeIndex: 1 as EdgeIndex_t, sourceEdgeIndex: 4 as EdgeIndex_t },
+        { neighborPieceIndex: 7 as BoardPieceIndex_t, neighborEdgeIndex: 3 as EdgeIndex_t, sourceEdgeIndex: 0 as EdgeIndex_t }
+    ],    
+    [ 7 as BoardPieceIndex_t ]:
+    [        
+        { neighborPieceIndex: 3 as BoardPieceIndex_t, neighborEdgeIndex: 2 as EdgeIndex_t, sourceEdgeIndex: 5 as EdgeIndex_t },
+        { neighborPieceIndex: 4 as BoardPieceIndex_t, neighborEdgeIndex: 1 as EdgeIndex_t, sourceEdgeIndex: 4 as EdgeIndex_t },
+        { neighborPieceIndex: 6 as BoardPieceIndex_t, neighborEdgeIndex: 0 as EdgeIndex_t, sourceEdgeIndex: 3 as EdgeIndex_t }
     ]
 };
 
 // see board_piece_connection_diagram under image-references/indexandnamingdiagram for details
 const lookupConnectedEdgeNodeIndicies: { [ sourceEdgeNodeIndex: EdgeNodeIndex_t ]: { linkedEdgeNodeIndex: EdgeNodeIndex_t, connectionDirectionAdjustment: number }[] } = {
-    0: [
-        { linkedEdgeNodeIndex: 2,  connectionDirectionAdjustment: -1 },
-        { linkedEdgeNodeIndex: 1,  connectionDirectionAdjustment: 0 },
+    [0 as EdgeNodeIndex_t]: 
+    [
+        { linkedEdgeNodeIndex: 2 as EdgeNodeIndex_t,  connectionDirectionAdjustment: -1 },
+        { linkedEdgeNodeIndex: 1 as EdgeNodeIndex_t,  connectionDirectionAdjustment: 0 },
     ],
-    1:  [
-        { linkedEdgeNodeIndex: 1,  connectionDirectionAdjustment: -1 },
-        { linkedEdgeNodeIndex: 0,  connectionDirectionAdjustment: 0 },
+    [1 as EdgeNodeIndex_t]:  
+    [
+        { linkedEdgeNodeIndex: 1 as EdgeNodeIndex_t,  connectionDirectionAdjustment: -1 },
+        { linkedEdgeNodeIndex: 0 as EdgeNodeIndex_t,  connectionDirectionAdjustment: 0 },
     ],
-    2:  [
-        { linkedEdgeNodeIndex: 0,  connectionDirectionAdjustment: -1 },
+    [2 as EdgeNodeIndex_t]:  
+    [
+        { linkedEdgeNodeIndex: 0 as EdgeNodeIndex_t,  connectionDirectionAdjustment: -1 },
     ],
-};
+    };
 
 export function GenerateGameBoard( numberOfPieces: number )
 {
@@ -81,10 +92,10 @@ export function GenerateGameBoard( numberOfPieces: number )
     let spaceCannonLocation: HexLocation_t | null = null;
     
     while ( Object.keys( pieces ).length < numberOfPieces) {
-        const boardPieceIndex = Object.keys( pieces ).length;
+        const boardPieceIndex = Object.keys( pieces ).length as BoardPieceIndex_t;
         const templateIndex = randomizedTemplateIndicies[iterateRandomTemplateIndicies];
         const templateNodes = template[templateIndex];
-        const spaceGunIndex = templateNodes.findIndex( ( node ) => node.type === NodeType.cannon );
+        const spaceGunIndex = templateNodes.findIndex( ( node ) => node.type === NodeType.cannon ) as HexNodeIndex_t;
 
         if( spaceGunIndex > -1 )
         {
@@ -173,13 +184,13 @@ function canConnectEdge( pieces: BoardPieceMap_t, sourceEdgeNodes: HexNode_t[], 
 {
     const edgeNodesIndiciesOfPlanets = sourceEdgeNodes.map( ( edgeNode, edgeNodeIndex ) => {
         if (edgeNode.nodeType === NodeType.planet) {
-            return edgeNodeIndex;
+            return edgeNodeIndex as EdgeNodeIndex_t;
         }
 
         return undefined;
     });
 
-    for (const edgeNodeIndexOfPlanet of edgeNodesIndiciesOfPlanets) {
+    for (const edgeNodeIndexOfPlanet of edgeNodesIndiciesOfPlanets ) {
         if (edgeNodeIndexOfPlanet === undefined) {
             continue;
         }
@@ -196,7 +207,7 @@ function canConnectEdge( pieces: BoardPieceMap_t, sourceEdgeNodes: HexNode_t[], 
 function linkBoardPieces( pieces: BoardPieceMap_t, boardPiece: BoardPiece_t, boardPieceIndex: BoardPieceIndex_t ): BoardPieceMap_t
 {
     const boardPieceConnections = boardPieceNeighborsMap[boardPieceIndex];
-    let linkedPieces = {...pieces, [ boardPieceIndex ]: boardPiece };
+    let linkedPieces: BoardPieceMap_t = {...pieces, [ boardPieceIndex ]: boardPiece };
     for (const boardPieceConnection of boardPieceConnections) {
         const neighborPiece = linkedPieces[boardPieceConnection.neighborPieceIndex];
         if (!neighborPiece) 
@@ -209,15 +220,15 @@ function linkBoardPieces( pieces: BoardPieceMap_t, boardPiece: BoardPiece_t, boa
         for( let sourceEdgeNodeIndex = 0; sourceEdgeNodeIndex < sourceEdgeInfo.nodeIndices.length; sourceEdgeNodeIndex++ )
         {
             const sourceNodeIndex = sourceEdgeInfo.nodeIndices[sourceEdgeNodeIndex];
-            const neighborNodesToLink = lookupConnectedEdgeNodeIndicies[ sourceEdgeNodeIndex ];
+            const neighborNodesToLink = lookupConnectedEdgeNodeIndicies[ sourceEdgeNodeIndex as EdgeNodeIndex_t];
             for( let neighborEdgeNodeIndex = 0; neighborEdgeNodeIndex < neighborNodesToLink.length; neighborEdgeNodeIndex++ )
             {
                 const neighborNodeIndex = neighborNodesToLink[neighborEdgeNodeIndex];
                 linkedPieces = linkEdgeNodes( linkedPieces, 
                     { boardPieceIndex: boardPieceIndex, hexNodeIndex: sourceNodeIndex },
-                    ( sourceEdgeInfo.edgeIndex - 1 + neighborEdgeNodeIndex + 6 ) % 6, // connection direction on the source node to the neighbor node
+                    ValidateConnectionDirection( sourceEdgeInfo.edgeIndex - 1 + neighborEdgeNodeIndex), // connection direction on the source node to the neighbor node
                     { boardPieceIndex: boardPieceConnection.neighborPieceIndex, hexNodeIndex: neighborEdgeInfo.nodeIndices[ neighborNodeIndex.linkedEdgeNodeIndex ] },
-                    ( neighborEdgeInfo.edgeIndex + neighborNodeIndex.connectionDirectionAdjustment + 6 ) % 6, // connection direction on the neighbor node back to the source node 
+                    ValidateConnectionDirection( neighborEdgeInfo.edgeIndex + neighborNodeIndex.connectionDirectionAdjustment), // connection direction on the neighbor node back to the source node 
                 );
             }
         }
@@ -266,7 +277,8 @@ function validateNodesNotPlanetOrNeighborToPlanet( pieces: BoardPieceMap_t, edge
     return true;
 }
 
-// black magic rotation math, don't ask me how i did it
+// the rotational math is a bit black magic, don't ask me how i sussed it out
+// because i've purged it from my memory at this point
 function linkSpaceCannon( pieces:BoardPieceMap_t, spaceCannonLocation: HexLocation_t )
 {
     const tempPieces = { ...pieces };
@@ -274,6 +286,7 @@ function linkSpaceCannon( pieces:BoardPieceMap_t, spaceCannonLocation: HexLocati
     const spaceCannonBoardPiece= tempPieces[spaceCannonBoardPieceIndex]
     const spaceCannonNode = spaceCannonBoardPiece.nodes[spaceCannonHexNodeIndex];
 
+    // add the initial neighbors of the space cannon
     const neighborsToCheck : HexNodeNeighbor_t[]= [];
     spaceCannonNode.neighbors.forEach( (cannonNeighbor) => { 
         if( cannonNeighbor.connectionDirection === undefined)
@@ -281,7 +294,7 @@ function linkSpaceCannon( pieces:BoardPieceMap_t, spaceCannonLocation: HexLocati
 
         const bAddRotationToDirection = cannonNeighbor.location.boardPieceIndex !== spaceCannonBoardPieceIndex;
         const neighborRotation = bAddRotationToDirection ? pieces[cannonNeighbor.location.boardPieceIndex].rotation - spaceCannonBoardPiece.rotation : 0;
-        neighborsToCheck.push( { location: cannonNeighbor.location, connectionDirection: ( cannonNeighbor.connectionDirection + neighborRotation ) % 6 } );
+        neighborsToCheck.push( { location: cannonNeighbor.location, connectionDirection: ValidateConnectionDirection( cannonNeighbor.connectionDirection + neighborRotation )} );
     });
 
     const spaceCannonNeighbors: HexNodeNeighbor_t[] = [];
@@ -303,7 +316,7 @@ function linkSpaceCannon( pieces:BoardPieceMap_t, spaceCannonLocation: HexLocati
             {
                 const bAddRotationToDirection = neighbor.location.boardPieceIndex !== targetPieceIndex
                 const neighborRotation = bAddRotationToDirection ? pieces[neighbor.location.boardPieceIndex].rotation - targetBoardPiece.rotation : 0;
-                neighborsToCheck.push({ location: neighbor.location, connectionDirection: ( targetNeighbor.connectionDirection + neighborRotation + 6 ) % 6 })
+                neighborsToCheck.push({ location: neighbor.location, connectionDirection: ValidateConnectionDirection( targetNeighbor.connectionDirection + neighborRotation ) })
             }
         });
 

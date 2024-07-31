@@ -1,4 +1,7 @@
-$borderWidth: 8px;
+$borderWidth: 12px;
+$selectedColor: rgb(255, 255, 255);
+$reachableNeighborColor: rgb(46, 170, 34);
+$unreachableColor: rgb(201, 44, 44);
 
 .Hex {
     user-select: none;
@@ -15,13 +18,13 @@ $borderWidth: 8px;
     border: $borderWidth solid transparent;
 
     &.Selected {
-        border: $borderWidth solid rgb(248, 73, 73);
-        background-color:  rgb(248, 73, 73);
+        border: $borderWidth solid $selectedColor;
+        background-color: $selectedColor;
     }
 
     &.IsNeighbor {
-        border: $borderWidth solid rgb(32, 235, 170);
-        background-color: rgb(32, 235, 170);
+        border: $borderWidth solid $reachableNeighborColor;
+        background-color: $reachableNeighborColor;
         cursor: pointer;
     }
 
@@ -31,8 +34,8 @@ $borderWidth: 8px;
         pointer-events: none;
     
         &.IsNeighbor {
-            border: $borderWidth solid rgb(141, 141, 141);
-            background-color: rgb(141, 141, 141);
+            border: $borderWidth solid $unreachableColor;
+            background-color: $unreachableColor;
         }
         
         &.DebugMode {
@@ -44,35 +47,25 @@ $borderWidth: 8px;
         pointer-events: none;
 
         &.IsNeighbor {
-            border: $borderWidth solid rgb(141, 141, 141);
-            background-color: rgb(141, 141, 141);
+            border: $borderWidth solid $unreachableColor;
+            background-color: $unreachableColor;
         }
 
         &.DebugMode {
             pointer-events: all;
         }
-
-        &::after {
-            background-color: rgb(202, 151, 57);
-        }
     }
 
     &.nebula {
-        &::after {
-            background-color: lightcoral;
-        }
+
     }
 
     &.cannon {
-        &::after {
-            background-color: rgb(46, 171, 171);
-        }
+
     }
 
     &.orbit {
-        &::after {
-            background-color: rgb(22, 77, 33);
-        }
+
     }
 }
 
@@ -85,7 +78,7 @@ $borderWidth: 8px;
     height: calc(100% + 1.5*$borderWidth);
     background-color: rgb(0, 0, 0);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    object-fit: fill;
+    object-fit: cover;
     box-sizing: border-box;
 }
 
