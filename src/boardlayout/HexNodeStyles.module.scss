@@ -12,6 +12,7 @@ $borderWidth: 8px;
     justify-content: center;
     position: relative;
     pointer-events: auto;
+    border: $borderWidth solid transparent;
 
     &.Selected {
         border: $borderWidth solid rgb(248, 73, 73);
@@ -27,13 +28,30 @@ $borderWidth: 8px;
     &.star,
     &.station,
     &.asteroid {
-        border: none;
-        background-color: none;
+        pointer-events: none;
+    
+        &.IsNeighbor {
+            border: $borderWidth solid rgb(141, 141, 141);
+            background-color: rgb(141, 141, 141);
+        }
+        
+        &.DebugMode {
+            pointer-events: all;
+        }
     }
 
     &.planet {
-        border: none;
-        background-color: none;
+        pointer-events: none;
+
+        &.IsNeighbor {
+            border: $borderWidth solid rgb(141, 141, 141);
+            background-color: rgb(141, 141, 141);
+        }
+
+        &.DebugMode {
+            pointer-events: all;
+        }
+
         &::after {
             background-color: rgb(202, 151, 57);
         }
@@ -61,16 +79,54 @@ $borderWidth: 8px;
 .HexBackground {
     content: "";
     position: absolute;
-    top: -0.5*$borderWidth;
-    left: -0.5*$borderWidth;
-    width: calc(100% + $borderWidth);
-    height: calc(100% + $borderWidth);
+    top: -0.75*$borderWidth;
+    left: -0.75*$borderWidth;
+    width: calc(100% + 1.5*$borderWidth);
+    height: calc(100% + 1.5*$borderWidth);
     background-color: rgb(0, 0, 0);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     object-fit: fill;
+    box-sizing: border-box;
 }
 
 .HexInfo {
     z-index: 1;
     font-size: 12px;
+}
+
+.Edge0 {
+    position: absolute; 
+    top: 8px;
+    right: 8px;
+}
+
+.Edge1{ 
+    position: absolute; 
+    top: 45%;
+    right: 0;
+
+}
+
+.Edge2{ 
+    position: absolute; 
+    bottom: 8px;
+    right: 10px;
+}
+
+.Edge3{ 
+    position: absolute; 
+    bottom: 8px;
+    left: 10px;
+}
+
+.Edge4{ 
+    position: absolute; 
+    top: 45%;
+    left: 0;
+}
+
+.Edge5{ 
+    position: absolute; 
+    top: 8px;
+    left: 8px;
 }

@@ -6,6 +6,7 @@ import { GameBoardLayout } from '../boardlayout/GameBoardLayout';
 import { useNavigate } from 'react-router-dom';
 import { clearPlayers } from '../reducers/PlayerReducer';
 import { ClearGameSession } from '../utils/sessionutils';
+import { ErrorBoundary } from 'react-error-boundary';
 function GameSession() 
 {
     const gameBoard = useSelector( selectGameBoard );
@@ -26,7 +27,9 @@ function GameSession()
     return (
         <div className={ styles.GameSession }>
             <ResetGame/>
-            <GameBoardLayout gameBoardPieces={ gameBoard } />
+            <ErrorBoundary fallback={ <div>Failed to render board</div>}>
+                <GameBoardLayout gameBoardPieces={ gameBoard } />
+            </ErrorBoundary>
         </div>
     );
 }

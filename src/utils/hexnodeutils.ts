@@ -1,19 +1,29 @@
 import { spaceImages, nebulaImages, asteroidImages, sunImages, stationImages, cannonImage, planetImages } from "../image_assets/images";
 import { NodeType, PlanetTypes } from "../template";
+import { BoardPieceIndex_t } from "./boardpieceutils";
+
+export type HexNodeIndex_t = number;
+export type ConnectionDirection_t = number;
 
 export interface HexNode_t {
-    nodeID: number,
+    hexNodeIndex: HexNodeIndex_t,
     nodeType: NodeType,
-    neighborLocations: HexLocation_t[],
+    neighbors: HexNodeNeighbor_t[],
     isPlanet: boolean, 
     planetName?: PlanetTypes,
     hexNodeCenterX?: number,
     hexNodeCenterY?: number,
 }
 
+export interface HexNodeNeighbor_t 
+{
+    location: HexLocation_t,
+    connectionDirection?: ConnectionDirection_t,
+}
+
 export interface HexLocation_t {
-    boardPieceID: number, 
-    hexNodeID: number,
+    boardPieceIndex: BoardPieceIndex_t, 
+    hexNodeIndex: HexNodeIndex_t,
 }
 
 export function GenerateNodeBackground(nodeType: NodeType, name?: PlanetTypes): string {
@@ -45,15 +55,15 @@ export function GenerateNodeBackground(nodeType: NodeType, name?: PlanetTypes): 
         return "";
 }
 
-export function FindNodeGridPosition(index: number): { row: number, column: number } {
-    if (index < 3)
-        return { row: 1, column: 3 + index * 2 };
-    else if (index < 7)
-        return { row: 4, column: 2 + (index - 3)*2 };
-    else if (index < 12)
-        return { row: 7, column: 1 + (index - 7)*2 };
-    else if (index < 16)
-        return { row: 10, column: 2 + (index - 12)*2 };
+export function FindNodeGridPosition( nodeIndex: HexNodeIndex_t ): { row: number, column: number } {
+    if (nodeIndex < 3)
+        return { row: 1, column: 3 + nodeIndex * 2 };
+    else if (nodeIndex < 7)
+        return { row: 4, column: 2 + (nodeIndex - 3)*2 };
+    else if (nodeIndex < 12)
+        return { row: 7, column: 1 + (nodeIndex - 7)*2 };
+    else if (nodeIndex < 16)
+        return { row: 10, column: 2 + (nodeIndex - 12)*2 };
     else
-        return { row: 13, column: 3 + (index - 16)*2 };
+        return { row: 13, column: 3 + (nodeIndex - 16)*2 };
 }

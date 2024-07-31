@@ -29,12 +29,12 @@ const gameBoardSlice = createSlice({
 })
 
 export const selectGameBoard = (state: RootState) => state.board.gameboard;
-export const selectBoardPiece = ( boardPieceID: number ) => ( state: RootState ): BoardPiece_t => state.board.gameboard[boardPieceID];
+export const selectBoardPiece = ( boardPieceIndex: number ) => ( state: RootState ): BoardPiece_t => state.board.gameboard[boardPieceIndex];
 export const selectHexNode = ( location: HexLocation_t | undefined) => (state: RootState ): HexNode_t | null => 
 {
     if( location )
     {
-       return state.board.gameboard[location.boardPieceID].nodes[location.hexNodeID]
+       return state.board.gameboard[location.boardPieceIndex].nodes[location.hexNodeIndex]
     }
     return null;
 };
