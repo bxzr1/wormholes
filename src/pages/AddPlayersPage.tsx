@@ -22,6 +22,13 @@ export function AddPlayers() {
         setPlayerName( '')
     }
 
+    const onKeyDown = ( ev: React.KeyboardEvent) => {
+        if( ev.key === 'Enter')
+        {
+            onAddPlayer();
+        }
+    }
+
     const onStartGame = () => {
         dispatch( initNewGame( 8 ) )
         navigate( '/play');
@@ -42,7 +49,7 @@ export function AddPlayers() {
            }
             <div className={ styles.NameInput }>
                 <div> Input Player Name: </div>
-                <input type={ 'text' } value={ playerName} onChange={ onNameInputChange }/> 
+                <input type={ 'text' } value={ playerName} onChange={ onNameInputChange } onKeyDown={ onKeyDown } /> 
             </div>
             <div>
                 <button className={ styles.AddPlayerButton } disabled={numPlayers >= 3 || !playerName } onClick={ onAddPlayer }>Add Player</button>

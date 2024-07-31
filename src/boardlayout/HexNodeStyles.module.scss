@@ -12,6 +12,7 @@ $borderWidth: 8px;
     justify-content: center;
     position: relative;
     pointer-events: auto;
+    border: $borderWidth solid transparent;
 
     &.Selected {
         border: $borderWidth solid rgb(248, 73, 73);
@@ -28,9 +29,12 @@ $borderWidth: 8px;
     &.station,
     &.asteroid {
         pointer-events: none;
-        // border: none;
-        background-color: none;
-
+    
+        &.IsNeighbor {
+            border: $borderWidth solid rgb(141, 141, 141);
+            background-color: rgb(141, 141, 141);
+        }
+        
         &.DebugMode {
             pointer-events: all;
         }
@@ -38,8 +42,11 @@ $borderWidth: 8px;
 
     &.planet {
         pointer-events: none;
-        // border: none;
-        background-color: none;
+
+        &.IsNeighbor {
+            border: $borderWidth solid rgb(141, 141, 141);
+            background-color: rgb(141, 141, 141);
+        }
 
         &.DebugMode {
             pointer-events: all;
@@ -72,13 +79,14 @@ $borderWidth: 8px;
 .HexBackground {
     content: "";
     position: absolute;
-    top: -0.5*$borderWidth;
-    left: -0.5*$borderWidth;
-    width: calc(100% + $borderWidth);
-    height: calc(100% + $borderWidth);
+    top: -0.75*$borderWidth;
+    left: -0.75*$borderWidth;
+    width: calc(100% + 1.5*$borderWidth);
+    height: calc(100% + 1.5*$borderWidth);
     background-color: rgb(0, 0, 0);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     object-fit: fill;
+    box-sizing: border-box;
 }
 
 .HexInfo {

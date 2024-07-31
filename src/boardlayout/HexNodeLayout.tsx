@@ -1,9 +1,10 @@
 import { useState, useRef, useLayoutEffect } from 'react'
-import { HexNode_t, HexLocation_t, GenerateNodeBackground, FindNodeGridPosition, debugMode } from '../utils/hexnodeutils';
+import { HexNode_t, HexLocation_t, GenerateNodeBackground, FindNodeGridPosition } from '../utils/hexnodeutils';
 import { isUnreachable } from '../template';
 import styles from './HexNodeStyles.module.scss'
 import classnames from 'classnames'
 import { BoardPieceIndex_t } from '../utils/boardpieceutils';
+import { debugHexNodeInfo } from '../utils/debugutils';
 
 export function HexPiece( props: {
     boardPieceIndex: BoardPieceIndex_t,
@@ -23,7 +24,7 @@ export function HexPiece( props: {
         isSelected && styles.Selected,
         isNeighbor && styles.IsNeighbor,
         styles[node.nodeType ],
-        debugMode && styles.DebugMode
+        debugHexNodeInfo && styles.DebugMode
     )
     const hexNodeDiv = useRef<HTMLDivElement>(null);
     
@@ -38,7 +39,7 @@ export function HexPiece( props: {
     }, [node]);
 
     const onClick = () => {
-        if( debugMode || !isUnreachable( node.nodeType ) )
+        if( debugHexNodeInfo || !isUnreachable( node.nodeType ) )
         {
             setSelectedLocation( { boardPieceIndex: boardPieceIndex, hexNodeIndex: nodeID } )
         }
@@ -57,10 +58,9 @@ export function HexPiece( props: {
             onClick={onClick}>
             <div className={ styles.HexInfo } >
                {
-                    debugMode && 
+                    debugHexNodeInfo && 
                     <>
-                        <div> {`id: ${nodeID}`} </div>
-                        <div> {`bid: ${boardPieceIndex}`} </div>
+                        <div> {`${boardPieceIndex}_${nodeID}`} </div>
                         <div>{node.planetName}</div>
                         <div className={ styles.Edge0 }>{( 0 + boardPieceRotation )%6 }</div>
                         <div className={ styles.Edge1 }>{( 1 + boardPieceRotation )%6 }</div>

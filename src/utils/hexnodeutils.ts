@@ -2,7 +2,6 @@ import { spaceImages, nebulaImages, asteroidImages, sunImages, stationImages, ca
 import { NodeType, PlanetTypes } from "../template";
 import { BoardPieceIndex_t } from "./boardpieceutils";
 
-export const debugMode = true;
 export type HexNodeIndex_t = number;
 export type ConnectionDirection_t = number;
 

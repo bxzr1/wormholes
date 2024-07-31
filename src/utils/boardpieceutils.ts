@@ -1,5 +1,6 @@
-import { ConnectionDirection_t, debugMode, HexNode_t, HexNodeIndex_t, HexNodeNeighbor_t } from "./hexnodeutils";
+import { ConnectionDirection_t, HexNode_t, HexNodeIndex_t, HexNodeNeighbor_t } from "./hexnodeutils";
 import { NodeDescription, NodeType } from "../template";
+import { debugLinearRotations } from "./debugutils";
 
 export type EdgeIndex_t = number; 
 export type EdgeNodeIndex_t = number;
@@ -243,7 +244,7 @@ export function CreateBoardPiece( boardPieceIndex: BoardPieceIndex_t, templateIn
     return {
         boardPieceIndex, 
         templateIndex,
-        rotation: debugMode ? boardPieceIndex % 6 : Math.floor(Math.random() * 5),
+        rotation: debugLinearRotations ? boardPieceIndex % 6 : Math.floor(Math.random() * 5),
         nodes: nodesWithNeighbors
     }
 

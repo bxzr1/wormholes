@@ -1,6 +1,7 @@
 import {  BoardPiece_t, BoardPieceIndex_t, CreateBoardPiece, EdgeIndex_t, EdgeNodeIndex_t, GetBoardPieceEdgeInfo, GetRotatedBoardPiece } from "./boardpieceutils";
-import { ConnectionDirection_t, debugMode, HexLocation_t, HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
+import { ConnectionDirection_t, HexLocation_t, HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
 import { NodeType, template } from "../template";
+import { debugLinearTemplatePieces } from "./debugutils";
 
 interface BoardPieceConnection {
     neighborPieceIndex: BoardPieceIndex_t;
@@ -112,7 +113,7 @@ function randomizeArray()
 {
     const templateIndices = Array.from(Array(template.length).keys());
 
-    if( !debugMode )
+    if( !debugLinearTemplatePieces )
     {
         for (let i = template.length - 1; i > 0; i--) {
             const randomIndex = Math.floor(Math.random() * (i + 1)) + 1;
@@ -280,7 +281,7 @@ function linkSpaceCannon( pieces:BoardPieceMap_t, spaceCannonLocation: HexLocati
 
         const bAddRotationToDirection = cannonNeighbor.location.boardPieceIndex !== spaceCannonBoardPieceIndex;
         const neighborRotation = bAddRotationToDirection ? pieces[cannonNeighbor.location.boardPieceIndex].rotation - spaceCannonBoardPiece.rotation : 0;
-        neighborsToCheck.push( { location: cannonNeighbor.location, connectionDirection: cannonNeighbor.connectionDirection + neighborRotation } );
+        neighborsToCheck.push( { location: cannonNeighbor.location, connectionDirection: ( cannonNeighbor.connectionDirection + neighborRotation ) % 6 } );
     });
 
     const spaceCannonNeighbors: HexNodeNeighbor_t[] = [];
