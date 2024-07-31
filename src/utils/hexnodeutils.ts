@@ -1,9 +1,6 @@
 import { spaceImages, nebulaImages, asteroidImages, sunImages, stationImages, cannonImage, planetImages } from "../image_assets/images";
 import { NodeType, PlanetTypes } from "../template";
-import { BoardPieceIndex_t } from "./boardpieceutils";
-
-export type HexNodeIndex_t = number;
-export type ConnectionDirection_t = number;
+import { HexNodeIndex_t, ConnectionDirection_t, BoardPieceIndex_t, GridNodeIndex_t } from "./aliasutils";
 
 export interface HexNode_t {
     hexNodeIndex: HexNodeIndex_t,
@@ -55,7 +52,7 @@ export function GenerateNodeBackground(nodeType: NodeType, name?: PlanetTypes): 
         return "";
 }
 
-export function FindNodeGridPosition( nodeIndex: HexNodeIndex_t ): { row: number, column: number } {
+export function FindNodeGridPosition( nodeIndex: GridNodeIndex_t ): { row: number, column: number } {
     if (nodeIndex < 3)
         return { row: 1, column: 3 + nodeIndex * 2 };
     else if (nodeIndex < 7)

@@ -3,14 +3,14 @@ import { HexNode_t, HexLocation_t, GenerateNodeBackground, FindNodeGridPosition 
 import { isUnreachable } from '../template';
 import styles from './HexNodeStyles.module.scss'
 import classnames from 'classnames'
-import { BoardPieceIndex_t } from '../utils/boardpieceutils';
 import { debugHexNodeInfo } from '../utils/debugutils';
+import { BoardPieceIndex_t, GridNodeIndex_t } from '../utils/aliasutils';
 
 export function HexPiece( props: {
     boardPieceIndex: BoardPieceIndex_t,
     boardPieceRotation: number,
     node: HexNode_t,
-    gridID: number,
+    gridID: GridNodeIndex_t,
     isSelected: boolean, 
     isNeighbor: boolean,
     setSelectedLocation: ( hexLocation: HexLocation_t )=> void 

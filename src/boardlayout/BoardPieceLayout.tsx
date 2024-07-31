@@ -5,6 +5,7 @@ import { HexLocation_t } from '../utils/hexnodeutils';
 import styles from './GameBoardStyles.module.scss';
 import { selectHexNode } from '../reducers/BoardReducer';
 import { useSelector } from 'react-redux';
+import { GridNodeIndex_t } from '../utils/aliasutils';
 
 const rowAndColumn = [
     { row: 25, column: 2 },
@@ -36,13 +37,14 @@ export const BoardPieceLayout = (props: {
             } } >
             { nodeKeys.map(( gridID ) => 
                 {
-                    const node = GetRotatedNodeAtIndex( parseInt( gridID ), boardPiece );
+                    const gridNode = parseInt( gridID ) as GridNodeIndex_t;
+                    const node = GetRotatedNodeAtIndex( gridNode, boardPiece );
                     const isClicked = selectedLocation && node.hexNodeIndex === selectedLocation.hexNodeIndex && boardPiece.boardPieceIndex === selectedLocation.boardPieceIndex;
                     const isNeighborOfSelected = selectedNode ? selectedNode.neighbors.findIndex(( neighbor ) => neighbor.location.boardPieceIndex === boardPiece.boardPieceIndex && neighbor.location.hexNodeIndex === node.hexNodeIndex ) > -1 : false;
                     return <HexPiece
                         boardPieceIndex={ boardPiece.boardPieceIndex }
                         node={ node }
-                        gridID = { parseInt( gridID ) } 
+                        gridID={ gridNode } 
                         isNeighbor={ isNeighborOfSelected }
                         isSelected={ !!isClicked }
                         setSelectedLocation={ setSelectedLocation }
