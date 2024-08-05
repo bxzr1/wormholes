@@ -7,10 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { clearPlayers } from '../reducers/PlayerReducer';
 import { ClearGameSession } from '../utils/sessionutils';
 import { ErrorBoundary } from 'react-error-boundary';
+import { PlayerDetails } from '../playerlayout/PlayerDetails';
+
 function GameSession() 
 {
     const gameBoard = useSelector( selectGameBoard );
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => 
     {
@@ -23,29 +26,23 @@ function GameSession()
 
     if ( !gameBoard || Object.keys( gameBoard ).length <= 0 )
         return null;
-    
-    return (
-        <div className={ styles.GameSession }>
-            <ResetGame/>
-            <ErrorBoundary fallback={ <div>Failed to render board</div>}>
-                <GameBoardLayout gameBoardPieces={ gameBoard } />
-            </ErrorBoundary>
-        </div>
-    );
-}
-
-function ResetGame()
-{
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const onReset = () => {
-        dispatch( clearPlayers )
-        dispatch( clearBoard )
+        dispatch( clearPlayers() )
+        dispatch( clearBoard() )
         ClearGameSession();
         navigate('/')
     }
-    return <button className={ styles.ResetButton } onClick={ onReset } >Reset Game</button>
+    
+    return (
+        <div className={ styles.GameSession }>
+            <button className={ styles.ResetButton } onClick={ onReset } >Reset Game</button>
+            <ErrorBoundary fallback={ <div>Failed to render board</div>}>
+                <GameBoardLayout gameBoardPieces={ gameBoard } />
+                <PlayerDetails />
+            </ErrorBoundary>
+        </div>
+    );
 }
 
 export default GameSession;

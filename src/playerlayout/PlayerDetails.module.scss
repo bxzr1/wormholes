@@ -1,0 +1,77 @@
+@import '../playercolors.scss';
+
+.Players {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.PlayerDetails {
+    padding: 16px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.PlayerInfo {
+  font-size: 24px;
+}
+
+.PlayerWormholes {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.WormholeContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.Wormhole {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    opacity: 0.5;
+
+    &.Player0 {
+        background-color: $player0;
+    }
+
+    &.Player1 {
+        background-color: $player1;
+    }
+
+    &.Player2 {
+        background-color: $player2;
+    }
+
+    &.Player3 {
+        background-color: $player3;
+    }
+
+    &.Player4 {
+        background-color: $player4;
+    }
+
+    &.Active {
+        opacity: 1;
+    }
+}
+
+.WormholeNumber {
+    font-size: 16px;
+}
+
+.WormholeLocation {
+    font-size: 12px;
+}

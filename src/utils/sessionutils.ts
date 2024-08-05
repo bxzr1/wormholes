@@ -3,7 +3,7 @@ import { RootState } from "../reducers/RootReducer";
 const sessionkey = 'wormhole_game'
 export function SaveGameSession( gameState: RootState)
 {
-    const isValidBoard = Object.keys( gameState.board.gameboard ).length > 0;
+    const isValidBoard = Object.keys( gameState.boardState.gameboard ).length > 0;
     const isValidPlayers = Object.keys( gameState.playerState.players ).length > 0;
     if( isValidBoard && isValidPlayers )
     {

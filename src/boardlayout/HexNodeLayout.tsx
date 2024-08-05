@@ -1,10 +1,12 @@
-import { useState, useRef, useLayoutEffect } from 'react'
+import { useState } from 'react'
 import { HexNode_t, HexLocation_t, GenerateNodeBackground, FindNodeGridPosition } from '../utils/hexnodeutils';
 import { isUnreachable } from '../template';
 import styles from './HexNodeStyles.module.scss'
 import classnames from 'classnames'
 import { debugHexNodeInfo } from '../utils/debugutils';
 import { BoardPieceIndex_t, GridNodeIndex_t } from '../utils/aliasutils';
+import { selectPlayersAtLocation } from '../reducers/PlayerReducer';
+import { useSelector } from 'react-redux';
 
 export function HexPiece( props: {
     boardPieceIndex: BoardPieceIndex_t,
@@ -16,8 +18,11 @@ export function HexPiece( props: {
     setSelectedLocation: ( hexLocation: HexLocation_t )=> void 
 }) {
     const { boardPieceIndex, boardPieceRotation, gridID, node, isSelected, isNeighbor, setSelectedLocation } = props;
-    const [ imgUrl ] = useState<string>( () => GenerateNodeBackground(node.nodeType, node.planetName ));  
     const nodeID = node.hexNodeIndex;
+
+    const playersOnNode = useSelector( selectPlayersAtLocation( { boardPieceIndex, hexNodeIndex: node.hexNodeIndex }))
+
+    const [ imgUrl ] = useState<string>( () => GenerateNodeBackground(node.nodeType, node.planetName ));  
     const { row, column } = FindNodeGridPosition(gridID);
     const className = classnames( 
         styles.Hex,
@@ -26,17 +31,6 @@ export function HexPiece( props: {
         styles[node.nodeType ],
         debugHexNodeInfo && styles.DebugMode
     )
-    const hexNodeDiv = useRef<HTMLDivElement>(null);
-    
-    useLayoutEffect(() => {
-        const boundingRectangle = hexNodeDiv?.current?.getBoundingClientRect();
-        if (boundingRectangle === undefined) {
-            return;
-        }
-
-        // node.hexNodeCenterX = boundingRectangle.x + boundingRectangle.width/2;
-        // node.hexNodeCenterY = boundingRectangle.y + boundingRectangle.height/2;
-    }, [node]);
 
     const onClick = () => {
         if( debugHexNodeInfo || !isUnreachable( node.nodeType ) )
@@ -47,7 +41,6 @@ export function HexPiece( props: {
 
     return (
         <div className={className}
-            ref={hexNodeDiv}  
             style={ {
                 gridRowStart: row,
                 gridColumnStart: column,
@@ -71,6 +64,16 @@ export function HexPiece( props: {
                     </>
                }
             </div>
+            { 
+                playersOnNode.length > 0 && 
+                    <div className={ styles.Players } >
+                    {
+                        playersOnNode.map( ( player ) => {
+                            return <div className={ classnames( styles.PlayerToken, styles[`Player${ player.playerIndex }`]) }></div>
+                        })
+                    }
+                </div>
+            }
             <img className={ styles.HexBackground } src={ imgUrl } alt=''></img>
         </div>
     ) 
