@@ -1,3 +1,5 @@
+import { HexNodeIndex_t } from "./utils/aliasutils";
+
 export const enum NodeType
 {
     //unreachable = "unreachable",
@@ -35,6 +37,16 @@ export interface NodeDescription
     type: NodeType;
     name?: PlanetTypes;
 }
+
+export const orbitNodesIndicies: HexNodeIndex_t[] = 
+[ 
+    4 as HexNodeIndex_t, 
+    5 as HexNodeIndex_t, 
+    8 as HexNodeIndex_t, 
+    10 as HexNodeIndex_t, 
+    13 as HexNodeIndex_t, 
+    14 as HexNodeIndex_t 
+];
 
 export const template: NodeDescription[][] = [
     //0

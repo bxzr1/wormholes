@@ -5,7 +5,7 @@ import BoardReducer from "./BoardReducer";
 // REDUCERS
 export const rootReducer = combineReducers( {
     playerState: PlayerReducer,
-    board: BoardReducer,
+    boardState: BoardReducer,
 })
 
 export const store = configureStore({

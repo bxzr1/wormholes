@@ -4,6 +4,9 @@ import { addPlayer, selectNumPlayers, selectPlayers } from "../reducers/PlayerRe
 import styles from './AddPlayerPage.module.scss'
 import { useNavigate } from 'react-router-dom';
 import { initNewGame } from '../reducers/BoardReducer';
+import { GenerateDefaultWormholes, k_fuelPerRound } from '../utils/playerutils';
+import { BoardPieceIndex_t, HexNodeIndex_t, PlayerIndex_t } from '../utils/aliasutils';
+import { orbitNodesIndicies } from '../template';
 
 export function AddPlayers() {
 
@@ -18,7 +21,15 @@ export function AddPlayers() {
     }
 
     const onAddPlayer = () => {
-        dispatch( addPlayer( { name: playerName, score: 0, hexLocation: null } ))
+        dispatch( addPlayer( {
+            playerIndex: numPlayers as PlayerIndex_t,
+            fuelLeft: k_fuelPerRound,
+            hasPickedUp: false,
+            wormholes: GenerateDefaultWormholes( numPlayers as PlayerIndex_t ),
+            name: playerName, 
+            score: 0, 
+            hexLocation: { boardPieceIndex: 0 as BoardPieceIndex_t, hexNodeIndex: orbitNodesIndicies[ numPlayers as HexNodeIndex_t ]},
+         } ))
         setPlayerName( '')
     }
 

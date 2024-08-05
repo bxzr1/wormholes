@@ -8,8 +8,6 @@ export interface HexNode_t {
     neighbors: HexNodeNeighbor_t[],
     isPlanet: boolean, 
     planetName?: PlanetTypes,
-    hexNodeCenterX?: number,
-    hexNodeCenterY?: number,
 }
 
 export interface HexNodeNeighbor_t 

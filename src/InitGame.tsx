@@ -14,11 +14,11 @@ export function InitGame()
         const savedState = LoadGameSession();
         if( savedState )
         {
-            const isValidBoard = Object.keys( savedState.board.gameboard ).length > 0;
+            const isValidBoard = Object.keys( savedState.boardState.gameboard ).length > 0;
             const isValidPlayers = Object.keys( savedState.playerState.players ).length > 0;
             if( isValidBoard && isValidPlayers )
             {
-                dispatch( initSavedBoard( savedState.board ) );
+                dispatch( initSavedBoard( savedState.boardState ) );
                 dispatch( initSavedPlayers( savedState.playerState ) );
                 navigate( '/play' );
                 return;

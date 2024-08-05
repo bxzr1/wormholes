@@ -1,3 +1,5 @@
+@import '../playercolors.scss';
+
 $borderWidth: 12px;
 $selectedColor: rgb(255, 255, 255);
 $reachableNeighborColor: rgb(46, 170, 34);
@@ -122,4 +124,44 @@ $unreachableColor: rgb(201, 44, 44);
     position: absolute; 
     top: 8px;
     left: 8px;
+}
+
+
+.Players {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    gap: 2px;
+
+    .PlayerToken {
+        aspect-ratio: 1;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        opacity: 0.75;
+        border: 1px solid white;
+        
+        &.Player0 {
+            background-color: $player0;
+        }
+
+        &.Player1 {
+            background-color: $player1;
+        }
+
+        &.Player2 {
+            background-color: $player2;
+        }
+
+        &.Player3 {
+            background-color: $player3;
+        }
+
+        &.Player4 {
+            background-color: $player4;
+        }
+    }
 }
