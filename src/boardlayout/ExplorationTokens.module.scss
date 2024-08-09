@@ -1,0 +1,32 @@
+.ExplorationStack {
+    position: relative;
+    user-select: none;
+    margin: 32px 16px;
+    min-width: 52px;
+    min-height: 52px;
+    
+}
+
+.ExplorationCoin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: 50%;
+    color: white;
+    background-color: grey;
+    height: 52px;
+    width: 52px;
+    border: 2px solid black;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.CoinIndex {
+    font-size: 12px;
+}
+
+.VictoryPoints {
+    font-size: 16px;
+}

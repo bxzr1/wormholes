@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addPlayer, selectNumPlayers, selectPlayers } from "../reducers/PlayerReducer";
+import { playerActions, selectNumPlayers, selectPlayers } from "../reducers/PlayerReducer";
 import styles from './AddPlayerPage.module.scss'
 import { useNavigate } from 'react-router-dom';
-import { initNewGame } from '../reducers/BoardReducer';
+import { boardActions } from '../reducers/BoardReducer';
 import { GenerateDefaultWormholes, k_fuelPerRound } from '../utils/playerutils';
 import { BoardPieceIndex_t, HexNodeIndex_t, PlayerIndex_t } from '../utils/aliasutils';
 import { orbitNodesIndicies } from '../template';
@@ -21,7 +21,7 @@ export function AddPlayers() {
     }
 
     const onAddPlayer = () => {
-        dispatch( addPlayer( {
+        dispatch( playerActions.addPlayer( {
             playerIndex: numPlayers as PlayerIndex_t,
             fuelLeft: k_fuelPerRound,
             hasPickedUp: false,
@@ -41,7 +41,8 @@ export function AddPlayers() {
     }
 
     const onStartGame = () => {
-        dispatch( initNewGame( 8 ) )
+        dispatch( boardActions.initNewGame( 8 ) )
+        dispatch( playerActions.changeCurrentPlayer( 0 as PlayerIndex_t ) )
         navigate( '/play');
     };
 

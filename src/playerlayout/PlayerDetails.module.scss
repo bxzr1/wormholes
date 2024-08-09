@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     user-select: none;
+    padding: 16px;
 }
 
 .PlayerDetails {
@@ -15,6 +16,11 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 8px;
+    border-radius: 4px;
+
+    &.CurrentPlayer {
+        border: 2px solid white;
+    }
 }
 
 .PlayerInfo {

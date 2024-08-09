@@ -15,9 +15,8 @@ export function HexPiece( props: {
     gridID: GridNodeIndex_t,
     isSelected: boolean, 
     isNeighbor: boolean,
-    setSelectedLocation: ( hexLocation: HexLocation_t )=> void 
 }) {
-    const { boardPieceIndex, boardPieceRotation, gridID, node, isSelected, isNeighbor, setSelectedLocation } = props;
+    const { boardPieceIndex, boardPieceRotation, gridID, node, isSelected, isNeighbor } = props;
     const nodeID = node.hexNodeIndex;
 
     const playersOnNode = useSelector( selectPlayersAtLocation( { boardPieceIndex, hexNodeIndex: node.hexNodeIndex }))
@@ -32,13 +31,6 @@ export function HexPiece( props: {
         debugHexNodeInfo && styles.DebugMode
     )
 
-    const onClick = () => {
-        if( debugHexNodeInfo || !isUnreachable( node.nodeType ) )
-        {
-            setSelectedLocation( { boardPieceIndex: boardPieceIndex, hexNodeIndex: nodeID } )
-        }
-    }
-
     return (
         <div className={className}
             style={ {
@@ -48,7 +40,7 @@ export function HexPiece( props: {
                 gridColumnEnd: 'span 2'
 
              } } 
-            onClick={onClick}>
+            onClick={() => {} }>
             <div className={ styles.HexInfo } >
                {
                     debugHexNodeInfo && 

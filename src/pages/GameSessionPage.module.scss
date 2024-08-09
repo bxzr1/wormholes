@@ -2,10 +2,13 @@
   text-align: center;
   width: 100%; 
   height: 100%; 
-  display: flex; 
-  flex-wrap: wrap; 
+  display: flex;
   font-size: 36px;
-  gap: 48px;
+  gap: 16px;
+}
+
+.GameParts {
+    flex-grow: 0;
 }
 
 .ResetButton {

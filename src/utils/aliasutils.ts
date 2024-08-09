@@ -1,4 +1,5 @@
-// google typescript branded types
+// for more details google typescript branded types
+// see IndexAndNamingDiagrams for more details on what each item represents
 
 type Brand<K, T> = K & { __brand: T }
 
@@ -12,6 +13,8 @@ export type BoardPieceIndex_t = Brand<number, 'BoardPieceIndex'>;
 export type PlayerIndex_t = Brand<number, 'PlayerIndex'>;
 
 export type WormholeIndex_t = Brand<number, 'WormHoleIndex'>;
+
+export type ExplorationIndex_t = Brand<number, 'ExplorationIndex_t'>;
 
 // Connection directions need to be between 0 - 5 since we are working with hexes 
 // also mod on a negative number is ass 

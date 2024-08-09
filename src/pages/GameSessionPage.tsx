@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import styles from './GameSessionPage.module.scss';
 import { useDispatch, useSelector } from "react-redux";
-import { clearBoard, selectGameBoard } from '../reducers/BoardReducer';
+import { boardActions, selectGameBoard } from '../reducers/BoardReducer';
 import { GameBoardLayout } from '../boardlayout/GameBoardLayout';
 import { useNavigate } from 'react-router-dom';
-import { clearPlayers } from '../reducers/PlayerReducer';
+import { playerActions } from '../reducers/PlayerReducer';
 import { ClearGameSession } from '../utils/sessionutils';
 import { ErrorBoundary } from 'react-error-boundary';
 import { PlayerDetails } from '../playerlayout/PlayerDetails';
+import { PassengerDeck } from '../boardlayout/PassengerDeck';
+import { ExplorationTokens } from '../boardlayout/ExplorationTokens';
 
 function GameSession() 
 {
@@ -28,8 +30,8 @@ function GameSession()
         return null;
 
     const onReset = () => {
-        dispatch( clearPlayers() )
-        dispatch( clearBoard() )
+        dispatch( playerActions.clearPlayers() )
+        dispatch( boardActions.clearBoard() )
         ClearGameSession();
         navigate('/')
     }
@@ -39,6 +41,10 @@ function GameSession()
             <button className={ styles.ResetButton } onClick={ onReset } >Reset Game</button>
             <ErrorBoundary fallback={ <div>Failed to render board</div>}>
                 <GameBoardLayout gameBoardPieces={ gameBoard } />
+                <div className={ styles.GameParts }>
+                    <ExplorationTokens/>
+                    <PassengerDeck/>
+                </div>
                 <PlayerDetails />
             </ErrorBoundary>
         </div>

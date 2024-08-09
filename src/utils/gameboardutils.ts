@@ -1,6 +1,6 @@
 import { BoardPiece_t, CreateBoardPiece, GetBoardPieceEdgeInfo, GetRotatedBoardPiece } from "./boardpieceutils";
 import { HexLocation_t, HexNode_t, HexNodeNeighbor_t } from "./hexnodeutils";
-import { NodeType, template } from "../template";
+import { NodeDescription, NodeType, PlanetTypes, template } from "../template";
 import { debugLinearTemplatePieces } from "./debugutils";
 import { BoardPieceIndex_t, ConnectionDirection_t, ValidateConnectionDirection, EdgeIndex_t, EdgeNodeIndex_t, HexNodeIndex_t } from "./aliasutils";
 
@@ -87,40 +87,50 @@ const lookupConnectedEdgeNodeIndicies: { [ sourceEdgeNodeIndex: EdgeNodeIndex_t 
 export function GenerateGameBoard( numberOfPieces: number )
 {
     let iterateRandomTemplateIndicies = 0;
-    let randomizedTemplateIndicies = randomizeArray();
+    let randomizedTemplateIndicies = randomizeTemplateNodes();
     let pieces: BoardPieceMap_t = {};
     let spaceCannonLocation: HexLocation_t | null = null;
+    let planetsInPlay: NodeDescription[] = [];
     
     while ( Object.keys( pieces ).length < numberOfPieces) {
         const boardPieceIndex = Object.keys( pieces ).length as BoardPieceIndex_t;
         const templateIndex = randomizedTemplateIndicies[iterateRandomTemplateIndicies];
         const templateNodes = template[templateIndex];
-        const spaceGunIndex = templateNodes.findIndex( ( node ) => node.type === NodeType.cannon ) as HexNodeIndex_t;
 
+        const spaceGunIndex = templateNodes.findIndex( ( node ) => node.type === NodeType.cannon ) as HexNodeIndex_t;
         if( spaceGunIndex > -1 )
         {
             spaceCannonLocation = { boardPieceIndex, hexNodeIndex: spaceGunIndex };
         }
+
+        const planets = templateNodes.filter( ( node ) => {
+            return node.type === NodeType.planet;
+        })
+        planetsInPlay.push( ...planets );
+
         const boardPiece = CreateBoardPiece( boardPieceIndex, templateIndex, templateNodes);
-       try{
+        try{
             pieces = addBoardPiece( pieces, boardPiece, boardPieceIndex );
             iterateRandomTemplateIndicies += 1;
-       }
-       catch ( e )
-       {
-            randomizedTemplateIndicies = randomizeArray();
+        }
+        catch ( e )
+        {
+            randomizedTemplateIndicies = randomizeTemplateNodes();
             iterateRandomTemplateIndicies = 0;
+            spaceCannonLocation = null;
+            planetsInPlay = [];
             pieces = {};
-       }
+        }
     }
+    const passengerDeck = GeneratePassengerDeck( planetsInPlay );
 
     if( spaceCannonLocation !== null)
-       return linkSpaceCannon( pieces, spaceCannonLocation )
+       pieces = linkSpaceCannon( pieces, spaceCannonLocation );
 
-    return pieces;
+    return { pieces, passengerDeck };
 }
 
-function randomizeArray()
+function randomizeTemplateNodes()
 {
     const templateIndices = Array.from(Array(template.length).keys());
 
@@ -337,4 +347,28 @@ function linkSpaceCannon( pieces:BoardPieceMap_t, spaceCannonLocation: HexLocati
             }
         }
     }
+}
+
+function GeneratePassengerDeck( planetsInPlay: NodeDescription[] )
+{
+    const passengerDeck: PlanetTypes[] = [];
+    planetsInPlay.forEach( ( planetDescription ) => 
+    {
+        if( planetDescription.name )
+        {
+            const passengers = Array(10).fill( planetDescription.name  );
+            passengerDeck.push( ...passengers )
+        }
+    } )
+
+    // Durstenfeld shuffle from SO
+    for (var i = passengerDeck.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = passengerDeck[i];
+        passengerDeck[i] = passengerDeck[j];
+        passengerDeck[j] = temp;
+    }
+
+    return passengerDeck;
+
 }
