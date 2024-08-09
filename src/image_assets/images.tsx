@@ -21,16 +21,16 @@ export const sun_6 = require('./star_images/sun_6.png');
 export const sun_7 = require('./star_images/sun_7.png');
 export const sun_8 = require('./star_images/sun_8.png');
 
-export const planet_BlueRed = require('./planet_images/planet_BlueRed.png');
-export const planet_PinkSaturn = require('./planet_images/planet_PinkSaturn.png');
-export const planet_GreenBall = require('./planet_images/planet_GreenBall.png');
-export const planet_IceBall = require('./planet_images/planet_IceBall.png');
-export const planet_BlackGold = require('./planet_images/planet_BlackGold.png');
-export const planet_FuzzyOrange = require('./planet_images/planet_FuzzyOrange.png');
-export const planet_WaterWorld = require('./planet_images/planet_WaterWorld.png');
-export const planet_FuzzyIce = require('./planet_images/planet_FuzzyIce.png');
-export const planet_YellowJupiter = require('./planet_images/planet_YellowJupiter.png');
-export const planet_PurpleEye = require('./planet_images/planet_PurpleEye.png');
+export const planet_BlueRed: string = require('./planet_images/planet_BlueRed.png');
+export const planet_PinkSaturn: string = require('./planet_images/planet_PinkSaturn.png');
+export const planet_GreenBall: string = require('./planet_images/planet_GreenBall.png');
+export const planet_IceBall: string = require('./planet_images/planet_IceBall.png');
+export const planet_BlackGold: string = require('./planet_images/planet_BlackGold.png');
+export const planet_FuzzyOrange: string = require('./planet_images/planet_FuzzyOrange.png');
+export const planet_WaterWorld: string = require('./planet_images/planet_WaterWorld.png');
+export const planet_FuzzyIce: string = require('./planet_images/planet_FuzzyIce.png');
+export const planet_YellowJupiter: string  = require('./planet_images/planet_YellowJupiter.png');
+export const planet_PurpleEye: string = require('./planet_images/planet_PurpleEye.png');
 
 export const spaceStation = require('./station.png');
 export const stationOrbit = require('./station_orbit.png');

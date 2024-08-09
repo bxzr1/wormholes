@@ -31,8 +31,8 @@ const playerSlice = createSlice({
         movePlayer: ( state: PlayerState, action: { payload: { playerIndex: PlayerIndex_t, hex: HexLocation_t } } ) => {
             state.players[action.payload.playerIndex].hexLocation = action.payload.hex;
         },
-        changeCurrentPlayer: ( state: PlayerState, action: { payload: { playerIndex: PlayerIndex_t } } ) => {
-            state.currentPlayer = action.payload.playerIndex;
+        changeCurrentPlayer: ( state: PlayerState, action: { payload: PlayerIndex_t } ) => {
+            state.currentPlayer = action.payload;
         }
     }
 })
@@ -61,7 +61,22 @@ export const selectPlayersAtLocation = ( location: HexLocation_t | undefined) =>
     return [];
 };
 
+export const selectCurrentPlayerIndex = (state: RootState): PlayerIndex_t => { 
+    return state.playerState.currentPlayer 
+};
+
+export const selectCurrentPlayer = (state: RootState): Player_t | null => { 
+    const currentPlayerIndex = state.playerState.currentPlayer;
+    if( currentPlayerIndex >= 0 )
+    {
+        return state.playerState.players[currentPlayerIndex];
+    }
+    return null;
+};
+
+
+
 export const selectNumPlayers = (state: RootState) => Object.keys(state.playerState.players).length;
-export const { clearPlayers, initSavedPlayers, addPlayer, movePlayer } = playerSlice.actions;
+export const playerActions = playerSlice.actions;
 
 export default playerSlice.reducer;

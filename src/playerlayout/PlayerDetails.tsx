@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectPlayers } from '../reducers/PlayerReducer';
+import { selectCurrentPlayerIndex, selectPlayers } from '../reducers/PlayerReducer';
 import styles from './PlayerDetails.module.scss';
 import classnames from 'classnames';
 import { Player_t, Wormhole } from '../utils/playerutils';
@@ -7,13 +7,16 @@ import { PlayerIndex_t } from '../utils/aliasutils';
 
 export const PlayerDetails = () => {
     const playerdetails = useSelector( selectPlayers )
-    const players: Player_t[] = Object.values( playerdetails ); 
+    const currentPlayerIndex = useSelector( selectCurrentPlayerIndex )
+    const players: Player_t[] = Object.values( playerdetails );
+
     return (
         < div className={ styles.Players }>
             {
                 players.map( ( player ) => {
+                    const isCurrentPlayer = currentPlayerIndex === player.playerIndex;
                     return (
-                        <div className={ styles.PlayerDetails }>
+                        <div className={ classnames( styles.PlayerDetails, isCurrentPlayer && styles.CurrentPlayer) }>
                             <PlayerInfo player={ player } />
                             <PlayerWormholes playerIndex={ player.playerIndex } wormholes={ player.wormholes }/>
                         </div>

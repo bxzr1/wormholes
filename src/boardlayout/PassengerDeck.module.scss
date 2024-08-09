@@ -1,0 +1,16 @@
+.PassengerDeck{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.Passenger {
+    height: fit-content;
+    width: fit-content;
+}
+
+.PassengerImage {
+    height: 24px;
+    width: 24px;
+    object-fit: contain;
+}

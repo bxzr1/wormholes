@@ -20,10 +20,9 @@ const rowAndColumn = [
 
 export const BoardPieceLayout = (props: { 
     boardPiece: BoardPiece_t, 
-    selectedLocation: HexLocation_t | undefined, 
-    setSelectedLocation: ( hex: HexLocation_t ) => void 
+    selectedLocation: HexLocation_t | null, 
 }) => {
-    const { boardPiece, selectedLocation, setSelectedLocation } = props;
+    const { boardPiece, selectedLocation } = props;
     const nodeKeys = Object.keys( boardPiece.nodes ); 
     const selectedNode = useSelector( selectHexNode( selectedLocation ) );
 
@@ -47,7 +46,6 @@ export const BoardPieceLayout = (props: {
                         gridID={ gridNode } 
                         isNeighbor={ isNeighborOfSelected }
                         isSelected={ !!isClicked }
-                        setSelectedLocation={ setSelectedLocation }
                         key={ node.hexNodeIndex }
                         boardPieceRotation={ boardPiece.rotation }
                 />
