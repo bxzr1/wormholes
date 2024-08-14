@@ -6,13 +6,19 @@ export function SaveGameSessionWrapper( props: { children: React.ReactNode })
 {
   
     useEffect( () => {
-        const fnSaveGameSession = () => {
+        const fnSaveGameSession = ( ev: BeforeUnloadEvent ) => {
+            ev.preventDefault()
+            console.log('running unload')
             const gameState = store.getState()
             SaveGameSession( gameState )
         }
-
+        console.log(' adding unload')
         window.addEventListener('beforeunload', fnSaveGameSession)
-        return () => window.removeEventListener('beforeunload', fnSaveGameSession)
+        return () =>
+        {
+            console.log('removing unload')
+            window.removeEventListener('beforeunload', fnSaveGameSession)
+        }
     }, [])
 
     return <>{ props.children }</>   

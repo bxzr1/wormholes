@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BoardPieceMap_t, GenerateGameBoard } from "../utils/gameboardutils";
+import { BoardPieceMap_t } from "../utils/gameboardutils";
 import { BoardPiece_t } from "../utils/boardpieceutils";
 import { HexLocation_t, HexNode_t } from "../utils/hexnodeutils";
 import { RootState } from "./RootReducer";
-import { BoardPieceIndex_t, ExplorationIndex_t } from "../utils/aliasutils";
-import { PlanetTypes } from "../template";
+import { BoardPieceIndex_t, ExplorationIndex_t, HexNodeIndex_t } from "../utils/aliasutils";
+import { GetFuelCost, PlanetTypes } from "../template";
 
 interface ExplorationCoin_t {
     explorationIndex: ExplorationIndex_t,
@@ -39,20 +39,16 @@ const gameBoardSlice = createSlice({
     name: 'boardState',
     initialState: initialState,
     reducers: {
-        initNewGame: ( state: BoardState, action: { payload: number } ) => {
-            const { pieces, passengerDeck } = GenerateGameBoard( action.payload )
-            state.gameboard = pieces;
-            state.passengerDeck = passengerDeck;
+        initNewGame: ( state: BoardState, action: { payload: BoardPieceMap_t } ) => {
+            state.gameboard = action.payload;
             state.explorationStack = initialExplorationStack;
         },
         initSavedBoard: ( state: BoardState, action: { payload: BoardState } ) => {
             state.gameboard = action.payload.gameboard;
-            state.passengerDeck = action.payload.passengerDeck;
             state.explorationStack = action.payload.explorationStack;
         },
         clearBoard: ( state: BoardState, action: {} ) => {
             state.gameboard = {};
-            state.passengerDeck = [];
             state.explorationStack = [];
         },
     }
@@ -60,7 +56,6 @@ const gameBoardSlice = createSlice({
 
 
 export const selectExplorationStack = (state: RootState) => state.boardState.explorationStack;
-export const selectPassengerDeck = (state: RootState) => state.boardState.passengerDeck;
 export const selectGameBoard = (state: RootState) => state.boardState.gameboard;
 export const selectBoardPiece = ( boardPieceIndex: BoardPieceIndex_t ) => ( state: RootState ): BoardPiece_t => state.boardState.gameboard[boardPieceIndex];
 export const selectHexNode = ( location: HexLocation_t | null ) => (state: RootState ): HexNode_t | null => 
@@ -71,6 +66,47 @@ export const selectHexNode = ( location: HexLocation_t | null ) => (state: RootS
     }
     return null;
 };
+
+interface MapTraversableNeighborsToCost_t { [ boardPieceIndex: BoardPieceIndex_t ] : { [ hexNodeIndex: HexNodeIndex_t ] : number } };
+export const selectHexNodeMoveableNeighborCosts = ( location: HexLocation_t | null, availableFuel: number ) => (state: RootState ) => 
+{
+    let mapTraversableNeighbors: MapTraversableNeighborsToCost_t = {}; 
+    if( location && availableFuel )
+    {
+        mapTraversableNeighbors = { [ location.boardPieceIndex ] : { [ location.hexNodeIndex] : 0 } };
+        mapTraversableNeighbors = GenerateTraversableNeighbors( state.boardState.gameboard, mapTraversableNeighbors, location, availableFuel, 0 );
+    }
+    return mapTraversableNeighbors;
+};
+
+function GenerateTraversableNeighbors( boardPieceMap: BoardPieceMap_t, mapNeighbors: MapTraversableNeighborsToCost_t, targetLocation: HexLocation_t, startingFuel: number, spentFuel: number )
+{        
+    const targetNode = boardPieceMap[targetLocation.boardPieceIndex].nodes[targetLocation.hexNodeIndex];
+    const neighbors = targetNode.neighbors
+    neighbors.forEach( ( neighbor ) => {
+        const neighborLocation = neighbor.location;
+        const fuelCost = spentFuel + GetFuelCost( targetNode.nodeType );
+        if( fuelCost <= startingFuel )
+        {
+            const recordedTraversalCost = mapNeighbors[neighborLocation.boardPieceIndex] ? mapNeighbors[neighborLocation.boardPieceIndex][neighborLocation.hexNodeIndex] : undefined;
+            if( recordedTraversalCost === undefined || fuelCost < recordedTraversalCost )
+            {
+                mapNeighbors = { 
+                    ...mapNeighbors,
+                    [ neighborLocation.boardPieceIndex ] : {
+                        ...mapNeighbors[neighborLocation.boardPieceIndex],
+                        [neighborLocation.hexNodeIndex]: fuelCost
+                    }
+                }
+
+                mapNeighbors = GenerateTraversableNeighbors( boardPieceMap, mapNeighbors, neighborLocation, startingFuel, fuelCost )
+            };
+        }
+    })
+
+    return mapNeighbors;
+}
+
 
 export const boardActions = gameBoardSlice.actions;
 export default gameBoardSlice.reducer;

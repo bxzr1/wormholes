@@ -18,6 +18,21 @@ export function isUnreachable( nodeType: NodeType )
     return nodeType === NodeType.asteroid || nodeType === NodeType.star || nodeType === NodeType.station || nodeType === NodeType.planet
 }
 
+export function GetFuelCost( nodeTypeOrigin: NodeType )
+{
+    if( nodeTypeOrigin === NodeType.nebula )
+    {
+        return 0;
+    }
+
+    if( nodeTypeOrigin === NodeType.cannon )
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
 export const enum PlanetTypes
 {
     BlueRed = "BlueRed",

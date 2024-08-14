@@ -2,7 +2,10 @@
 
 $borderWidth: 12px;
 $selectedColor: rgb(255, 255, 255);
-$reachableNeighborColor: rgb(46, 170, 34);
+$Cost0NeighborColor: rgb(11, 245, 214);
+$Cost1NeighborColor: rgb(42, 253, 0);
+$Cost2NeighborColor: rgb(239, 255, 8);
+$Cost3NeighborColor: rgb(241, 206, 11);
 $unreachableColor: rgb(201, 44, 44);
 
 .Hex {
@@ -19,14 +22,32 @@ $unreachableColor: rgb(201, 44, 44);
     pointer-events: auto;
     border: $borderWidth solid transparent;
 
-    &.Selected {
+    &.isOrigin {
         border: $borderWidth solid $selectedColor;
         background-color: $selectedColor;
     }
 
-    &.IsNeighbor {
-        border: $borderWidth solid $reachableNeighborColor;
-        background-color: $reachableNeighborColor;
+    &.Fuel_0 {
+        border: $borderWidth solid $Cost0NeighborColor;
+        background-color: $Cost0NeighborColor;
+        cursor: pointer;
+    }
+
+    &.Fuel_1 {
+        border: $borderWidth solid $Cost1NeighborColor;
+        background-color: $Cost1NeighborColor;
+        cursor: pointer;
+    }
+
+    &.Fuel_2 {
+        border: $borderWidth solid $Cost2NeighborColor;
+        background-color: $Cost2NeighborColor;
+        cursor: pointer;
+    }
+
+    &.Fuel_3 {
+        border: $borderWidth solid $Cost3NeighborColor;
+        background-color: $Cost3NeighborColor;
         cursor: pointer;
     }
 
@@ -35,7 +56,10 @@ $unreachableColor: rgb(201, 44, 44);
     &.asteroid {
         pointer-events: none;
     
-        &.IsNeighbor {
+        &.Fuel_0,
+        &.Fuel_1,
+        &.Fuel_2,
+        &.Fuel_3{
             border: $borderWidth solid $unreachableColor;
             background-color: $unreachableColor;
         }
@@ -48,7 +72,10 @@ $unreachableColor: rgb(201, 44, 44);
     &.planet {
         pointer-events: none;
 
-        &.IsNeighbor {
+        &.Fuel_0,
+        &.Fuel_1,
+        &.Fuel_2,
+        &.Fuel_3{
             border: $borderWidth solid $unreachableColor;
             background-color: $unreachableColor;
         }

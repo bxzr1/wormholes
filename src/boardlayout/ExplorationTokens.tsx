@@ -7,7 +7,7 @@ export function ExplorationTokens()
     const explorationStack = useSelector(selectExplorationStack);
 
     return (
-        <div className={ styles.ExplorationStack }>
+        <div className={ styles.ExplorationStack } >
             {
                 explorationStack.map( ( explorationCoin, index ) => {
                     return (

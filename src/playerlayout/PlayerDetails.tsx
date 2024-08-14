@@ -4,6 +4,8 @@ import styles from './PlayerDetails.module.scss';
 import classnames from 'classnames';
 import { Player_t, Wormhole } from '../utils/playerutils';
 import { PlayerIndex_t } from '../utils/aliasutils';
+import { PlanetTypes } from '../template';
+import { planetImages } from '../image_assets/images';
 
 export const PlayerDetails = () => {
     const playerdetails = useSelector( selectPlayers )
@@ -18,7 +20,10 @@ export const PlayerDetails = () => {
                     return (
                         <div className={ classnames( styles.PlayerDetails, isCurrentPlayer && styles.CurrentPlayer) }>
                             <PlayerInfo player={ player } />
-                            <PlayerWormholes playerIndex={ player.playerIndex } wormholes={ player.wormholes }/>
+                            <div className={ styles.PlayerPieces }>
+                                <PlayerWormholes playerIndex={ player.playerIndex } wormholes={ player.wormholes }/>
+                                <PlayerPassengers passengers={ player.passengers } />
+                            </div>
                         </div>
                     )
                 })
@@ -31,12 +36,12 @@ function PlayerInfo( props: { player: Player_t })
 {
     const { player } = props; 
     return(
-       <>
-            <div className={ styles.PlayerName }>{ player.name }</div>
+       <div className={ classnames(  styles.BasicInfo, styles[`Player${ player.playerIndex }`]) }>
+            <div className={ styles.PlayerInfo }>{ player.name }</div>
             <div className={ styles.PlayerInfo }>SCORE: { player.score }</div>
             <div className={ styles.PlayerInfo }>FUEL LEFT: { player.fuelLeft }</div>
             <div className={ styles.PlayerInfo }>HAS PICKED UP: { player.hasPickedUp ? 'yes': 'no' }</div>
-       </>
+       </div>
     )
 }
 
@@ -44,7 +49,9 @@ function PlayerWormholes( props: { playerIndex: PlayerIndex_t, wormholes: Wormho
 {
     const { playerIndex, wormholes } = props; 
     return (
-        <div className={ styles.PlayerWormholes } >
+        <div className={ styles.PlayerWormholesCtn }>
+            Wormholes: 
+            <div className={ styles.PlayerWormholes } >
             {
                 wormholes.map( ( wormhole ) => {
                     return (
@@ -73,5 +80,30 @@ function PlayerWormholes( props: { playerIndex: PlayerIndex_t, wormholes: Wormho
                 })
             }
         </div>
+        </div>
+    )
+}
+
+function PlayerPassengers( props: { passengers: PlanetTypes[]})
+{
+    const { passengers } = props; 
+    return(
+      <div className={ styles.PlayerPassengerCtn }>
+            Passengers:
+            <div className={ styles.PlayerPassengers }>
+                {
+                    passengers.map( ( passenger ) => 
+                        {
+                            const imageUrl = planetImages[passenger];
+                            return (
+                                <div className={ styles.Passenger }>
+                                    <img className={ styles.PassengerImage } src={ imageUrl } alt=''></img>
+                                </div>
+                            )
+                        })
+                }
+            </div>
+            <button>CHANGE PASSENGERS</button>
+      </div>
     )
 }

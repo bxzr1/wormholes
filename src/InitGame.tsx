@@ -19,7 +19,7 @@ export function InitGame()
             if( isValidBoard && isValidPlayers )
             {
                 dispatch( boardActions.initSavedBoard( savedState.boardState ) );
-                dispatch( playerActions.initSavedPlayers( savedState.playerState ) );
+                dispatch( playerActions.initSavedPlayerState( savedState.playerState ) );
                 navigate( '/play' );
                 return;
             }

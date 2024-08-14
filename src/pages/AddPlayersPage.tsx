@@ -7,6 +7,8 @@ import { boardActions } from '../reducers/BoardReducer';
 import { GenerateDefaultWormholes, k_fuelPerRound } from '../utils/playerutils';
 import { BoardPieceIndex_t, HexNodeIndex_t, PlayerIndex_t } from '../utils/aliasutils';
 import { orbitNodesIndicies } from '../template';
+import { GenerateGameBoard } from '../utils/gameboardutils';
+import { saveGameState } from '../reducers/RootReducer';
 
 export function AddPlayers() {
 
@@ -21,14 +23,16 @@ export function AddPlayers() {
     }
 
     const onAddPlayer = () => {
+        const initialLocation = { boardPieceIndex: 0 as BoardPieceIndex_t, hexNodeIndex: orbitNodesIndicies[ numPlayers as HexNodeIndex_t ] };
         dispatch( playerActions.addPlayer( {
             playerIndex: numPlayers as PlayerIndex_t,
             fuelLeft: k_fuelPerRound,
             hasPickedUp: false,
-            wormholes: GenerateDefaultWormholes( numPlayers as PlayerIndex_t ),
+            wormholes: GenerateDefaultWormholes( numPlayers as PlayerIndex_t, initialLocation ),
             name: playerName, 
             score: 0, 
-            hexLocation: { boardPieceIndex: 0 as BoardPieceIndex_t, hexNodeIndex: orbitNodesIndicies[ numPlayers as HexNodeIndex_t ]},
+            hexLocation: initialLocation,
+            passengers: []
          } ))
         setPlayerName( '')
     }
@@ -41,8 +45,11 @@ export function AddPlayers() {
     }
 
     const onStartGame = () => {
-        dispatch( boardActions.initNewGame( 8 ) )
+        const { pieces, passengerDeck }  = GenerateGameBoard( 8 ); 
+        dispatch( boardActions.initNewGame( pieces ) );
+        dispatch( playerActions.initPassengerDeck( passengerDeck ) );
         dispatch( playerActions.changeCurrentPlayer( 0 as PlayerIndex_t ) )
+        saveGameState();
         navigate( '/play');
     };
 

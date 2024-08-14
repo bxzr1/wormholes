@@ -1,11 +1,11 @@
 import React from 'react';
 import { HexPiece } from './HexNodeLayout';
 import { BoardPiece_t, GetRotatedNodeAtIndex } from '../utils/boardpieceutils';
-import { HexLocation_t } from '../utils/hexnodeutils';
 import styles from './GameBoardStyles.module.scss';
-import { selectHexNode } from '../reducers/BoardReducer';
-import { useSelector } from 'react-redux';
 import { GridNodeIndex_t } from '../utils/aliasutils';
+import { selectCurrentPlayer } from '../reducers/PlayerReducer';
+import { useSelector } from 'react-redux';
+import { selectHexNodeMoveableNeighborCosts } from '../reducers/BoardReducer';
 
 const rowAndColumn = [
     { row: 25, column: 2 },
@@ -19,12 +19,12 @@ const rowAndColumn = [
 ]
 
 export const BoardPieceLayout = (props: { 
-    boardPiece: BoardPiece_t, 
-    selectedLocation: HexLocation_t | null, 
+    boardPiece: BoardPiece_t,
 }) => {
-    const { boardPiece, selectedLocation } = props;
-    const nodeKeys = Object.keys( boardPiece.nodes ); 
-    const selectedNode = useSelector( selectHexNode( selectedLocation ) );
+    const { boardPiece } = props;
+    const nodeKeys = Object.keys( boardPiece.nodes );
+    const currentPlayer = useSelector( selectCurrentPlayer )
+    const mapNeighborCosts = useSelector( selectHexNodeMoveableNeighborCosts( currentPlayer?.hexLocation ?? null, currentPlayer?.fuelLeft ?? 0 ) )
 
     return (
         <div className={styles.GridContainerBoardPiece }
@@ -38,14 +38,12 @@ export const BoardPieceLayout = (props: {
                 {
                     const gridNode = parseInt( gridID ) as GridNodeIndex_t;
                     const node = GetRotatedNodeAtIndex( gridNode, boardPiece );
-                    const isClicked = selectedLocation && node.hexNodeIndex === selectedLocation.hexNodeIndex && boardPiece.boardPieceIndex === selectedLocation.boardPieceIndex;
-                    const isNeighborOfSelected = selectedNode ? selectedNode.neighbors.findIndex(( neighbor ) => neighbor.location.boardPieceIndex === boardPiece.boardPieceIndex && neighbor.location.hexNodeIndex === node.hexNodeIndex ) > -1 : false;
+                    const fuelCost = mapNeighborCosts[ boardPiece.boardPieceIndex ] ? mapNeighborCosts[ boardPiece.boardPieceIndex ][node.hexNodeIndex] : undefined
                     return <HexPiece
                         boardPieceIndex={ boardPiece.boardPieceIndex }
                         node={ node }
                         gridID={ gridNode } 
-                        isNeighbor={ isNeighborOfSelected }
-                        isSelected={ !!isClicked }
+                        fuelCost={ fuelCost }
                         key={ node.hexNodeIndex }
                         boardPieceRotation={ boardPiece.rotation }
                 />
