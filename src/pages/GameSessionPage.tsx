@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './GameSessionPage.module.scss';
 import { useDispatch, useSelector } from "react-redux";
 import { boardActions, selectGameBoard } from '../reducers/BoardReducer';
@@ -10,10 +10,12 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { PlayerDetails } from '../playerlayout/PlayerDetails';
 import { PassengerDeck } from '../boardlayout/PassengerDeck';
 import { ExplorationTokens } from '../boardlayout/ExplorationTokens';
+import { TooltipRootProvider } from '../utils/Tooltip';
 
 function GameSession() 
 {
     const gameBoard = useSelector( selectGameBoard );
+    const rootRef = useRef<HTMLDivElement>( null );
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -37,17 +39,19 @@ function GameSession()
     }
     
     return (
-        <div className={ styles.GameSession }>
-            <button className={ styles.ResetButton } onClick={ onReset } >Reset Game</button>
-            <ErrorBoundary fallback={ <div>Failed to render board</div>}>
-                <GameBoardLayout gameBoardPieces={ gameBoard } />
-                <div className={ styles.GameParts }>
-                    <ExplorationTokens/>
-                    <PassengerDeck/>
-                </div>
-                <PlayerDetails />
-            </ErrorBoundary>
-        </div>
+        <TooltipRootProvider rootRef={ rootRef }>
+            <div className={ styles.GameSession } ref={ rootRef }>
+                <button className={ styles.ResetButton } onClick={ onReset } >Reset Game</button>
+                <ErrorBoundary fallback={ <div>Failed to render board</div>}>
+                    <GameBoardLayout gameBoardPieces={ gameBoard } />
+                    <div className={ styles.GameParts }>
+                        <ExplorationTokens/>
+                        <PassengerDeck/>
+                    </div>
+                    <PlayerDetails />
+                </ErrorBoundary>
+            </div>
+        </TooltipRootProvider>
     );
 }
 

@@ -72,4 +72,6 @@ export const planetImages = {
     [PlanetTypes.YellowJupiter] : planet_YellowJupiter,
     [PlanetTypes.PurpleEye] : planet_PurpleEye,
 }
-    
+
+export const leftclick = require('./icons/leftclick.png')
+export const rightclick = require('./icons/rightclick.png')

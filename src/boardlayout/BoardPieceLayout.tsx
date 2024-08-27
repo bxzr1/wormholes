@@ -5,7 +5,7 @@ import styles from './GameBoardStyles.module.scss';
 import { GridNodeIndex_t } from '../utils/aliasutils';
 import { selectCurrentPlayer } from '../reducers/PlayerReducer';
 import { useSelector } from 'react-redux';
-import { selectHexNodeMoveableNeighborCosts } from '../reducers/BoardReducer';
+import { selectHexNode, selectHexNodeMoveableNeighborCosts } from '../reducers/BoardReducer';
 
 const rowAndColumn = [
     { row: 25, column: 2 },
@@ -23,7 +23,8 @@ export const BoardPieceLayout = (props: {
 }) => {
     const { boardPiece } = props;
     const nodeKeys = Object.keys( boardPiece.nodes );
-    const currentPlayer = useSelector( selectCurrentPlayer )
+    const currentPlayer = useSelector( selectCurrentPlayer );
+    const selectedHexNode = useSelector( selectHexNode( currentPlayer?.hexLocation ?? null ) )
     const mapNeighborCosts = useSelector( selectHexNodeMoveableNeighborCosts( currentPlayer?.hexLocation ?? null, currentPlayer?.fuelLeft ?? 0 ) )
 
     return (
@@ -38,7 +39,14 @@ export const BoardPieceLayout = (props: {
                 {
                     const gridNode = parseInt( gridID ) as GridNodeIndex_t;
                     const node = GetRotatedNodeAtIndex( gridNode, boardPiece );
-                    const fuelCost = mapNeighborCosts[ boardPiece.boardPieceIndex ] ? mapNeighborCosts[ boardPiece.boardPieceIndex ][node.hexNodeIndex] : undefined
+                    const fuelCost = mapNeighborCosts[ boardPiece.boardPieceIndex ] ? mapNeighborCosts[ boardPiece.boardPieceIndex ][node.hexNodeIndex] : undefined;
+                    const selectedNodeNeighborIndex = selectedHexNode?.neighbors.findIndex( ( neighbor ) => 
+                        neighbor.location.boardPieceIndex === boardPiece.boardPieceIndex && 
+                        neighbor.location.hexNodeIndex === node.hexNodeIndex && 
+                        neighbor.connectionDirection !== undefined
+                    )
+                    const adjacentToSelected = selectedNodeNeighborIndex !== undefined && selectedNodeNeighborIndex > -1
+
                     return <HexPiece
                         boardPieceIndex={ boardPiece.boardPieceIndex }
                         node={ node }
@@ -46,6 +54,7 @@ export const BoardPieceLayout = (props: {
                         fuelCost={ fuelCost }
                         key={ node.hexNodeIndex }
                         boardPieceRotation={ boardPiece.rotation }
+                        adjacentToSelected={ adjacentToSelected }
                 />
                 })
             }

@@ -2,17 +2,12 @@
 
 $borderWidth: 12px;
 $selectedColor: rgb(255, 255, 255);
-$Cost0NeighborColor: rgb(11, 245, 214);
-$Cost1NeighborColor: rgb(42, 253, 0);
-$Cost2NeighborColor: rgb(239, 255, 8);
-$Cost3NeighborColor: rgb(241, 206, 11);
-$unreachableColor: rgb(201, 44, 44);
 
 .Hex {
     user-select: none;
     color: white;
     background-color: rgba(0, 0, 0, 0);
-    box-sizing: border-box;
+    box-sizing: content-box;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     display: flex;
     flex-direction: column;
@@ -21,34 +16,81 @@ $unreachableColor: rgb(201, 44, 44);
     position: relative;
     pointer-events: auto;
     border: $borderWidth solid transparent;
-
-    &.isOrigin {
-        border: $borderWidth solid $selectedColor;
-        background-color: $selectedColor;
-    }
+    opacity: 0.5;
+    pointer-events: none;
 
     &.Fuel_0 {
-        border: $borderWidth solid $Cost0NeighborColor;
-        background-color: $Cost0NeighborColor;
+        pointer-events: all;
         cursor: pointer;
+        opacity: 1;
     }
 
     &.Fuel_1 {
-        border: $borderWidth solid $Cost1NeighborColor;
-        background-color: $Cost1NeighborColor;
+        pointer-events: all;
         cursor: pointer;
+        opacity: 1;
     }
 
     &.Fuel_2 {
-        border: $borderWidth solid $Cost2NeighborColor;
-        background-color: $Cost2NeighborColor;
+        pointer-events: all;
         cursor: pointer;
+        opacity: 1;
     }
 
     &.Fuel_3 {
-        border: $borderWidth solid $Cost3NeighborColor;
-        background-color: $Cost3NeighborColor;
+        pointer-events: all;
         cursor: pointer;
+        opacity: 1;
+    }
+
+    &.CanPlaceWormhole {
+        pointer-events: all;
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    &.isOrigin {
+        pointer-events: all;
+        border: $borderWidth solid $selectedColor;
+        background-color: white;
+        opacity: 1;
+    }
+
+    &.Wormhole {
+        pointer-events: all;
+
+        &.Player0 {
+            border: $borderWidth solid $player0;
+            background-color: white;
+        }
+
+        &.Player1 {
+            border: $borderWidth solid $player1;
+            background-color: white;
+        }
+
+        &.Player2 {
+            border: $borderWidth solid $player2;
+            background-color: white;
+        }
+
+        &.Player3 {
+            border: $borderWidth solid $player3;
+            background-color: white;
+        }
+
+        &.Player4 {
+            border: $borderWidth solid $player4;
+            background-color: white;
+        }
+
+        &.Active {
+            border-style: solid;
+        }
+
+        &.Inactive {
+            border-style: dashed;
+        }
     }
 
     &.star,
@@ -60,8 +102,11 @@ $unreachableColor: rgb(201, 44, 44);
         &.Fuel_1,
         &.Fuel_2,
         &.Fuel_3{
-            border: $borderWidth solid $unreachableColor;
-            background-color: $unreachableColor;
+            opacity: 0.5;
+        }
+
+        &.CanPlaceWormhole {
+            opacity: 0.5;
         }
         
         &.DebugMode {
@@ -76,10 +121,13 @@ $unreachableColor: rgb(201, 44, 44);
         &.Fuel_1,
         &.Fuel_2,
         &.Fuel_3{
-            border: $borderWidth solid $unreachableColor;
-            background-color: $unreachableColor;
+            opacity: 0.5;
         }
 
+        &.CanPlaceWormhole {
+            opacity: 0.5;
+        }
+        
         &.DebugMode {
             pointer-events: all;
         }
@@ -108,7 +156,7 @@ $unreachableColor: rgb(201, 44, 44);
     background-color: rgb(0, 0, 0);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     object-fit: cover;
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
 
 .HexInfo {
@@ -153,7 +201,6 @@ $unreachableColor: rgb(201, 44, 44);
     left: 8px;
 }
 
-
 .Players {
     display: flex;
     flex-direction: row;
@@ -168,9 +215,13 @@ $unreachableColor: rgb(201, 44, 44);
         height: 10px;
         width: 10px;
         border-radius: 50%;
-        opacity: 0.75;
         border: 1px solid white;
-        
+        opacity: 0.25;
+
+        &.CurrentPlayer {
+            opacity: 1;
+        }
+
         &.Player0 {
             background-color: $player0;
         }
@@ -189,6 +240,41 @@ $unreachableColor: rgb(201, 44, 44);
 
         &.Player4 {
             background-color: $player4;
+        }
+    }
+}
+
+.TooltipContent {
+    color: white;
+    font-size: 14px;
+    width: fit-content;
+    height: fit-content;
+    background-color:rgb(92, 92, 92);
+    border: 1px solid rgb(63, 62, 62);
+    border-radius: 4px;
+    padding: 8px;
+
+    .FuelInfo {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        justify-content: center;
+
+        >img {
+            height: 18px;
+            width: 18px;
+        }
+    }
+
+    .WormholeInfo {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        justify-content: center;
+
+        >img {
+            height: 18px;
+            width: 18px;
         }
     }
 }

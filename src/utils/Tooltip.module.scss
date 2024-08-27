@@ -1,0 +1,70 @@
+$arrowHeight: 8px;
+$borderColor: white;
+
+.TooltipCtn {
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &.bottom {
+        flex-direction: column-reverse;
+    }
+
+    &.left{
+        flex-direction: row;
+    }
+
+    &.right {
+        flex-direction: row-reverse;
+    }
+
+    &.Visible {
+        opacity: 1;
+    }
+
+    .TooltipContent {
+        box-sizing: content-box;
+        border-radius: 4px;
+        border: 2px solid $borderColor;
+    }
+
+   .Arrow {
+
+        &.top {
+            width: 0; 
+            height: 0; 
+            border-left: $arrowHeight solid transparent;
+            border-right: $arrowHeight  solid transparent;
+            border-top: $arrowHeight  solid $borderColor;
+        }
+
+        &.bottom {
+            width: 0; 
+            height: 0; 
+            border-left: $arrowHeight solid transparent;
+            border-right: $arrowHeight solid transparent;
+            border-bottom: $arrowHeight solid $borderColor;
+        }
+
+        &.left {
+            width: 0; 
+            height: 0; 
+            border-top: $arrowHeight solid transparent;
+            border-bottom: $arrowHeight solid transparent;
+            border-left: $arrowHeight solid $borderColor;
+        }
+
+        &.right {
+            width: 0; 
+            height: 0; 
+            border-top: $arrowHeight solid transparent;
+            border-bottom: $arrowHeight solid transparent; 
+            border-right: $arrowHeight solid $borderColor; 
+        }
+   }
+}

@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentPlayerIndex, selectPlayers } from '../reducers/PlayerReducer';
 import styles from './PlayerDetails.module.scss';
 import classnames from 'classnames';
@@ -6,6 +6,8 @@ import { Player_t, Wormhole } from '../utils/playerutils';
 import { PlayerIndex_t } from '../utils/aliasutils';
 import { PlanetTypes } from '../template';
 import { planetImages } from '../image_assets/images';
+import { playerActions } from '../reducers/PlayerReducer';
+import { current } from '@reduxjs/toolkit';
 
 export const PlayerDetails = () => {
     const playerdetails = useSelector( selectPlayers )
@@ -24,6 +26,7 @@ export const PlayerDetails = () => {
                                 <PlayerWormholes playerIndex={ player.playerIndex } wormholes={ player.wormholes }/>
                                 <PlayerPassengers passengers={ player.passengers } />
                             </div>
+                            { isCurrentPlayer && < PlayerButtons currentPlayerIndex={ currentPlayerIndex } /> }
                         </div>
                     )
                 })
@@ -103,7 +106,24 @@ function PlayerPassengers( props: { passengers: PlanetTypes[]})
                         })
                 }
             </div>
-            <button>CHANGE PASSENGERS</button>
       </div>
+    )
+}
+
+function PlayerButtons( props: { currentPlayerIndex: PlayerIndex_t })
+{
+    const { currentPlayerIndex } = props;
+    const dispatch = useDispatch();
+
+    const onEndTurn = () =>
+    {
+        dispatch( playerActions.endTurn( currentPlayerIndex ));
+    }
+
+    return (
+        <div className={ styles.PlayerButtons }>
+            <button>CHANGE PASSENGERS</button>
+            <button onClick={ onEndTurn }>END TURN</button>
+        </div>
     )
 }

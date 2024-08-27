@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialPassengersPerPlayer, Player_t } from "../utils/playerutils";
+import { initialPassengersPerPlayer, k_fuelPerRound, Player_t, Wormhole } from "../utils/playerutils";
 import { RootState } from "./RootReducer";
 import { HexLocation_t } from "../utils/hexnodeutils";
 import { PlayerIndex_t } from "../utils/aliasutils";
@@ -44,8 +44,47 @@ const playerSlice = createSlice({
         addPlayer: (state: PlayerState, action: { payload: Player_t }) => {
             state.players[action.payload.playerIndex] = action.payload;
         },
-        movePlayer: ( state: PlayerState, action: { payload: { playerIndex: PlayerIndex_t, hex: HexLocation_t } } ) => {
-            state.players[action.payload.playerIndex].hexLocation = action.payload.hex;
+        movePlayer: ( state: PlayerState, action: { payload: { playerIndex: PlayerIndex_t, hex: HexLocation_t, fuelCost: number } } ) => {
+            const player =  state.players[action.payload.playerIndex];
+            state.players[action.payload.playerIndex] = {
+                ...player, 
+                hexLocation: action.payload.hex,
+                fuelLeft: player.fuelLeft - action.payload.fuelCost
+            };
+        },
+        placeWormhole: ( state: PlayerState, action: { payload: { playerIndex: PlayerIndex_t, hex: HexLocation_t } } ) => {
+            // TODO: Figure out how to actually connect wormholes on the board
+            const player = state.players[action.payload.playerIndex];
+            const nextWormholeIndex = player.wormholes.findIndex( ( wormhole ) => wormhole.locationA === null || wormhole.locationB === null )
+            if( nextWormholeIndex > -1 )
+            {
+                const nextWormhole = player.wormholes[nextWormholeIndex];
+                if( nextWormhole.locationA === null )
+                {
+                    state.players[action.payload.playerIndex].wormholes[nextWormholeIndex] = {
+                        ...nextWormhole,
+                        locationA: action.payload.hex
+                    };
+                }
+                else 
+                {
+                    state.players[action.payload.playerIndex].wormholes[nextWormholeIndex] = {
+                        ...nextWormhole,
+                        locationB: action.payload.hex,
+                        active: true,
+                    };
+                }
+            }
+        },
+        endTurn: ( state: PlayerState, action: { payload: PlayerIndex_t } ) => {
+            state.players[action.payload] = {
+                ...state.players[action.payload],
+                fuelLeft: k_fuelPerRound,
+                hasPickedUp: false,
+            };
+            const numPlayers = Object.keys( state.players ).length;
+            state.currentPlayer = ( state.currentPlayer + 1 ) % numPlayers as PlayerIndex_t; 
+
         },
         changeCurrentPlayer: ( state: PlayerState, action: { payload: PlayerIndex_t } ) => {
             state.currentPlayer = action.payload;
@@ -87,6 +126,37 @@ export const selectPlayersAtLocation = ( location: HexLocation_t | undefined) =>
             }
         })
         return validPlayers;
+    }
+    return [];
+};
+
+export const selectWormholesAtLocation = ( location: HexLocation_t | undefined) => (state: RootState ): Wormhole[] => 
+{
+    if( location )
+    {
+        const wormholes: Wormhole[] = [];
+        const players: Player_t[] = Object.values( state.playerState.players );
+        players.forEach( ( player ) => {
+            player.wormholes.forEach( ( wormhole ) => {
+                const wormholeAOnLocation = wormhole.locationA && 
+                wormhole.locationA?.boardPieceIndex === location.boardPieceIndex && 
+                wormhole.locationA?.hexNodeIndex === location.hexNodeIndex;
+
+                const wormholeBOnLocation = wormhole.locationB && 
+                wormhole.locationB?.boardPieceIndex === location.boardPieceIndex && 
+                wormhole.locationB?.hexNodeIndex === location.hexNodeIndex
+                if( wormholeAOnLocation || wormholeBOnLocation )
+                {
+                    wormholes.push( wormhole)
+                }
+            } )
+        })
+
+        if( wormholes.length > 1 )
+        {
+            console.log('error: too many wormholes on node')
+        }
+        return wormholes;
     }
     return [];
 };
