@@ -8,6 +8,8 @@ import { playerActions, selectCurrentPlayer, selectPlayersAtLocation, selectWorm
 import { useDispatch, useSelector } from 'react-redux';
 import { ETooltipPosition, useTooltip } from '../utils/Tooltip';
 import { leftclick, rightclick } from '../image_assets/images';
+import { isCursorAtEnd } from '@testing-library/user-event/dist/utils';
+import { Wormhole } from '../utils/playerutils';
 
 
 export function HexPiece( props: {
@@ -44,9 +46,6 @@ export function HexPiece( props: {
         fuelCost !== undefined && styles[`Fuel_${fuelCost}`],
         canPlaceWormhole && styles.CanPlaceWormhole,
         isCurrentOrigin && styles.isOrigin,
-        wormholeOnNode !== undefined && styles.Wormhole,
-        wormholeOnNode !== undefined && styles[`Player${ wormholeOnNode.playerIndex }`],
-        wormholeOnNode !== undefined && styles[`${ wormholeOnNode.active ? 'Active' : 'Inactive'}`],
         styles[node.nodeType ],
         debugHexNodeInfo && styles.DebugMode
     )
@@ -71,9 +70,9 @@ export function HexPiece( props: {
     }
 
     const fnPlaceWormhole = ( ev: React.MouseEvent ) => {
-        if( !currentPlayer)
-            return;
         ev.preventDefault();
+        if( !currentPlayer || !canPlaceWormhole )
+            return;
         dispatch( playerActions.placeWormhole( { playerIndex: currentPlayer.playerIndex, hex: location } ));
     }
 
@@ -88,9 +87,27 @@ export function HexPiece( props: {
             onContextMenu={ fnPlaceWormhole }
         >
             { tooltip.tooltipContent }
-           <HexContent node={ node } boardPieceIndex={ boardPieceIndex } boardPieceRotation={ boardPieceRotation } currentPlayerIndex={ currentPlayer?.playerIndex }/>
+            { wormholeOnNode && <WormholeDisplay wormholeOnNode={wormholeOnNode}/> }
+        <HexContent node={ node } boardPieceIndex={ boardPieceIndex } boardPieceRotation={ boardPieceRotation } currentPlayerIndex={ currentPlayer?.playerIndex }/>
         </div>
     ) 
+}
+
+
+function WormholeDisplay( props: {wormholeOnNode: Wormhole})
+{
+    const { wormholeOnNode } = props;
+    const wormholeClasses = classnames(
+        styles.Wormhole,
+        styles[`${ wormholeOnNode.active ? 'Active' : 'Inactive'}`],
+        styles[`Player${ wormholeOnNode.playerIndex }`]
+    )
+
+    return (
+        <div className={ wormholeClasses }>
+            { wormholeOnNode.wormholeIndex }
+        </div>
+    )
 }
 
 function HexTooltipContent( props: { fuelCost? : number, canPlaceWormhole: boolean, isCurrentOrigin: boolean })

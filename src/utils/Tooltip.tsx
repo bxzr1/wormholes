@@ -99,7 +99,7 @@ function TooltipContents( props: { sourceRef: React.RefObject<HTMLDivElement>, c
 
     }, [sourceRef, contentRef, position, rootRef, isVisible ])
 
-    if( !rootRef?.current )
+    if( !rootRef?.current || !isVisible )
         return null;
 
     return ReactDOM.createPortal( 

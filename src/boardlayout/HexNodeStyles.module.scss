@@ -3,6 +3,7 @@
 $borderWidth: 12px;
 $selectedColor: rgb(255, 255, 255);
 
+
 .Hex {
     user-select: none;
     color: white;
@@ -54,43 +55,6 @@ $selectedColor: rgb(255, 255, 255);
         border: $borderWidth solid $selectedColor;
         background-color: white;
         opacity: 1;
-    }
-
-    &.Wormhole {
-        pointer-events: all;
-
-        &.Player0 {
-            border: $borderWidth solid $player0;
-            background-color: white;
-        }
-
-        &.Player1 {
-            border: $borderWidth solid $player1;
-            background-color: white;
-        }
-
-        &.Player2 {
-            border: $borderWidth solid $player2;
-            background-color: white;
-        }
-
-        &.Player3 {
-            border: $borderWidth solid $player3;
-            background-color: white;
-        }
-
-        &.Player4 {
-            border: $borderWidth solid $player4;
-            background-color: white;
-        }
-
-        &.Active {
-            border-style: solid;
-        }
-
-        &.Inactive {
-            border-style: dashed;
-        }
     }
 
     &.star,
@@ -276,5 +240,45 @@ $selectedColor: rgb(255, 255, 255);
             height: 18px;
             width: 18px;
         }
+    }
+}
+
+.Wormhole {
+    pointer-events: all;
+    position: absolute;
+    bottom: -12px;
+    left: 2px;
+    height: 16px;
+    width: 16px;
+    z-index: 9;
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 16px;
+    &.Player0 {
+        background-color: $player0;
+    }
+
+    &.Player1 {
+        background-color: $player1;
+    }
+
+    &.Player2 {
+        background-color: $player2;
+    }
+
+    &.Player3 {
+        background-color: $player3;
+    }
+
+    &.Player4 {
+        background-color: $player4;
+    }
+
+    &.Active {
+        border-style: solid;
+    }
+
+    &.Inactive {
+        border-style: dashed;
     }
 }

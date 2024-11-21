@@ -7,7 +7,6 @@ import { PlayerIndex_t } from '../utils/aliasutils';
 import { PlanetTypes } from '../template';
 import { planetImages } from '../image_assets/images';
 import { playerActions } from '../reducers/PlayerReducer';
-import { current } from '@reduxjs/toolkit';
 
 export const PlayerDetails = () => {
     const playerdetails = useSelector( selectPlayers )
