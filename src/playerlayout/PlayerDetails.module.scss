@@ -6,6 +6,11 @@
     flex-direction: column;
     user-select: none;
     padding: 16px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: fit-content;
+    background: grey;
 }
 
 .PlayerDetails {

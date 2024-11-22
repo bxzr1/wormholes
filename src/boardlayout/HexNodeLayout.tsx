@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { HexNode_t, GenerateNodeBackground, FindNodeGridPosition } from '../utils/hexnodeutils';
+import { HexNode_t, GenerateNodeBackground, FindNodeGridPosition, GetOrbitImageRotation } from '../utils/hexnodeutils';
 import styles from './HexNodeStyles.module.scss'
 import classnames from 'classnames'
 import { debugHexNodeInfo } from '../utils/debugutils';
@@ -8,8 +8,9 @@ import { playerActions, selectCurrentPlayer, selectPlayersAtLocation, selectWorm
 import { useDispatch, useSelector } from 'react-redux';
 import { ETooltipPosition, useTooltip } from '../utils/Tooltip';
 import { leftclick, rightclick } from '../image_assets/images';
-import { isCursorAtEnd } from '@testing-library/user-event/dist/utils';
 import { Wormhole } from '../utils/playerutils';
+import { SpaceShipSVG, WormholeActiveSVG, WormholeInactiveSVG } from '../image_assets/svg';
+import { NodeType } from '../template';
 
 
 export function HexPiece( props: {
@@ -87,8 +88,8 @@ export function HexPiece( props: {
             onContextMenu={ fnPlaceWormhole }
         >
             { tooltip.tooltipContent }
+            <HexContent node={ node } boardPieceIndex={ boardPieceIndex } boardPieceRotation={ boardPieceRotation } currentPlayerIndex={ currentPlayer?.playerIndex } gridID={ gridID }/>
             { wormholeOnNode && <WormholeDisplay wormholeOnNode={wormholeOnNode}/> }
-        <HexContent node={ node } boardPieceIndex={ boardPieceIndex } boardPieceRotation={ boardPieceRotation } currentPlayerIndex={ currentPlayer?.playerIndex }/>
         </div>
     ) 
 }
@@ -105,7 +106,10 @@ function WormholeDisplay( props: {wormholeOnNode: Wormhole})
 
     return (
         <div className={ wormholeClasses }>
-            { wormholeOnNode.wormholeIndex }
+            { wormholeOnNode.active ? <WormholeActiveSVG /> : <WormholeInactiveSVG /> }
+            <div className={ styles.WormholeIndex }>
+             { wormholeOnNode.wormholeIndex }
+            </div>
         </div>
     )
 }
@@ -135,17 +139,22 @@ function HexTooltipContent( props: { fuelCost? : number, canPlaceWormhole: boole
     )
 }
 
-function HexContent( props: { node: HexNode_t, boardPieceIndex: BoardPieceIndex_t, boardPieceRotation: number, currentPlayerIndex?: PlayerIndex_t }) 
+function HexContent( props: { node: HexNode_t, boardPieceIndex: BoardPieceIndex_t, boardPieceRotation: number, currentPlayerIndex?: PlayerIndex_t, gridID: GridNodeIndex_t }) 
 {
-    const { node, boardPieceIndex, boardPieceRotation, currentPlayerIndex } = props;
+    const { node, boardPieceIndex, boardPieceRotation, currentPlayerIndex, gridID } = props;
     const nodeID = node.hexNodeIndex;
     const location = { boardPieceIndex, hexNodeIndex: node.hexNodeIndex };
     const playersOnNode = useSelector( selectPlayersAtLocation( location ))
 
-    const [ imgUrl ] = useState<string>( () => GenerateNodeBackground(node.nodeType, node.planetName ));  
+    const [ imgUrl ] = useState<string>( () => GenerateNodeBackground(node.nodeType, node.planetName ));
+    let imgRotation = 0;
+    if( node.nodeType === NodeType.orbit)
+    {
+        imgRotation = GetOrbitImageRotation( gridID );
+    }
+
     return (
         <>
-            <HexDebugInfo boardPieceIndex={ boardPieceIndex } nodeID={ nodeID } planetName={ node.planetName || "" } boardPieceRotation={ boardPieceRotation }/>
             { 
                 playersOnNode.length > 0 && 
                     <div className={ styles.Players } >
@@ -153,13 +162,18 @@ function HexContent( props: { node: HexNode_t, boardPieceIndex: BoardPieceIndex_
                         playersOnNode.map( ( player ) => {
                             const isCurrentPlayer = currentPlayerIndex !== undefined ? currentPlayerIndex === player.playerIndex : false;
                             return (
-                                <div className={ classnames( styles.PlayerToken, styles[ isCurrentPlayer ? 'CurrentPlayer' : "" ], styles[`Player${ player.playerIndex }`]) }></div>
+                                <div  className={ classnames( styles.PlayerToken, styles[ isCurrentPlayer ? 'CurrentPlayer' : "" ], styles[`Player${ player.playerIndex }`]) }>
+                                    <SpaceShipSVG/>
+                                </div>
                             )
                         })
                     }
                 </div>
             }
-            <img className={ styles.HexBackground } src={ imgUrl } alt=''></img>
+            <HexDebugInfo boardPieceIndex={ boardPieceIndex } nodeID={ nodeID } planetName={ node.planetName || "" } boardPieceRotation={ boardPieceRotation }/>
+            <div className={ styles.ImageClip }>
+                <img className={ styles.HexBackground }  style={ imgRotation ? { transform: `rotate(${imgRotation}deg)`} : {} } src={ imgUrl } alt=''></img>
+            </div>
         </>
     )
 }

@@ -21,6 +21,20 @@ export interface HexLocation_t {
     hexNodeIndex: HexNodeIndex_t,
 }
 
+const orbitRotationMap: { [ index: GridNodeIndex_t ]: number }= {
+    [4 as GridNodeIndex_t ]: -30,
+    [5 as GridNodeIndex_t ]: 30,
+    [8 as GridNodeIndex_t ]: 90,
+    [10 as GridNodeIndex_t ]: 90, 
+    [13 as GridNodeIndex_t ]: 30,
+    [14 as GridNodeIndex_t ]: -30, 
+}
+
+export function GetOrbitImageRotation( gridNodeID: GridNodeIndex_t )
+{
+    return orbitRotationMap[gridNodeID];
+}
+
 export function GenerateNodeBackground(nodeType: NodeType, name?: PlanetTypes): string {
     if(nodeType === NodeType.space)
         return spaceImages[ Math.floor(Math.random() * (spaceImages.length)) ];

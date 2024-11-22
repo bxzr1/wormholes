@@ -39,7 +39,7 @@ interface TooltipPosition {
     left?: number,
 }
 
-export function useTooltip( contents: React.ReactNode, sourceRef: React.RefObject<HTMLDivElement>, position: ETooltipPosition )
+export function useTooltip( contents: React.ReactElement, sourceRef: React.RefObject<HTMLDivElement>, position: ETooltipPosition )
 {
     const [ isVisible, setIsVisible ] = useState< boolean >( false );
 
@@ -48,7 +48,7 @@ export function useTooltip( contents: React.ReactNode, sourceRef: React.RefObjec
     return { tooltipContent, setIsVisible }
 }
 
-function TooltipContents( props: { sourceRef: React.RefObject<HTMLDivElement>, children: React.ReactNode, isVisible: boolean, position: ETooltipPosition })
+function TooltipContents( props: { sourceRef: React.RefObject<HTMLDivElement>, children: React.ReactElement | null, isVisible: boolean, position: ETooltipPosition })
 {
     const { sourceRef, isVisible, children, position } = props; 
     const rootRef = useTooltipRootRef();
@@ -63,10 +63,10 @@ function TooltipContents( props: { sourceRef: React.RefObject<HTMLDivElement>, c
         const contentRect = contentRef.current.getBoundingClientRect(); 
 
         const sourceRectHorizontalCenter = sourceRect.left + ( sourceRect.right - sourceRect.left ) * 0.5;
-        const centeredLeft = sourceRectHorizontalCenter - ( contentRect.width * 0.5);
+        const centeredLeft = window.scrollX + sourceRectHorizontalCenter - ( contentRect.width * 0.5);
 
         const sourceRectVerticalCenter = sourceRect.top + ( sourceRect.bottom - sourceRect.top ) * 0.5;
-        const centeredTop = sourceRectVerticalCenter - ( contentRect.height ) * 0.5;
+        const centeredTop = window.scrollY + sourceRectVerticalCenter - ( contentRect.height ) * 0.5;
 
         if( position === ETooltipPosition.top )
         {
@@ -102,6 +102,9 @@ function TooltipContents( props: { sourceRef: React.RefObject<HTMLDivElement>, c
     if( !rootRef?.current || !isVisible )
         return null;
 
+console.log( children );
+    console.log( children?.type );
+
     return ReactDOM.createPortal( 
         <div 
             ref={ contentRef }
@@ -109,7 +112,7 @@ function TooltipContents( props: { sourceRef: React.RefObject<HTMLDivElement>, c
             style={ tooltipPosition ?? {} }
         >
             <div className={ styles.TooltipContent }>{ children }</div>
-            <div className={ classnames( styles.Arrow, styles[position]) }/>
+            { children && children.type !== null && <div className={ classnames( styles.Arrow, styles[position]) }/> }
         </div>,
         rootRef.current
     ) 
